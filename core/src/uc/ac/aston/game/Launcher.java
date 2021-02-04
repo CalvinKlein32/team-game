@@ -86,7 +86,7 @@ public class Launcher extends Game {
 		}else {
 			score=screen.getCurrentSore()+50;
 		}
-		if (currentLevel<3) {
+		if (currentLevel<6) {
 			screen = new PlayScreen(this,currentLevel,score);
 			setScreen(screen);
 			screen.createPlayer2();

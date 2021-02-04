@@ -64,14 +64,14 @@ public class Door {
 
 		TiledMapTileLayer layer= (TiledMapTileLayer) map.getLayers().get(3);
 		int dx=Math.round(bounds.getX()/16);
-		int dy=((int)(bounds.getY()+48)/16);
+		int dy=((int)(bounds.getY())/16);
 		
 		for (int j=0;j<= Math.round(bounds.getHeight())/16;j++) {
 			for (int i=0; i<Math.round(bounds.getWidth()/16);i++) {
 				//System.out.println((dx+i)+"and "+(dy-j));
 				
-				if (layer.getCell(dx+i, dy-j)!=null){
-					layer.getCell(dx+i, dy-j).setTile(null);
+				if (layer.getCell(dx+i, dy+j)!=null){
+					layer.getCell(dx+i, dy+j).setTile(null);
 				}
 			}
 		}

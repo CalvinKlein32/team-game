@@ -55,7 +55,7 @@ public class PlayScreen implements Screen{
 	private float startX= (float) 0.8;
 	private float startY=(float) 1.078326;
 	private Vector2 player2Position;
-	private String[] levelsMaps = {"level1.tmx","level2.tmx","level3.tmx"};
+	private String[] levelsMaps = {"level1.tmx","level2.tmx","level3.tmx","level4.tmx","level5.tmx","level6.tmx"};
 	private int currentLevel;
 	private int currentScore;
 	private Question listOfQuestions;
