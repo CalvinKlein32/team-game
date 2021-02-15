@@ -32,8 +32,10 @@ public class Launcher extends Game {
 	public static final short playerBit=2;
 	public static final short spikeBit=4;
 	public static final short seaBit=8;
-	public static final short doorBit = 10;
-	public static final short destroyedBit=16;
+	public static final short doorBit = 16;
+	public static final short destroyedBit=32;
+	public static final short enemyBit=64;
+	public static final short objectBit=128;
 	private Socket socket;
 	private boolean lobbyFull=false;
 	private PlayScreen screen;
@@ -52,7 +54,7 @@ public class Launcher extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		screen = new PlayScreen(this,0,0);
+		screen = new PlayScreen(this,5,0);
 		setScreen(screen);
 		connectSocket();
 		configSocketEvents();
@@ -144,7 +146,7 @@ public class Launcher extends Game {
 	
 	public void connectSocket() {
 		try{
-			socket =IO.socket("http://localhost:8080");
+			socket =IO.socket("https://new-mole-45.loca.lt");
 			socket.connect();
 			//socket.connect();
 			//System.out.print();

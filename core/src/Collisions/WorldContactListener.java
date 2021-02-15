@@ -11,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 
 import Obstacle.Door;
+import Obstacle.Dragon;
+import Obstacle.Enemy;
 import Obstacle.FinishLine;
 import Obstacle.InteractiveObstacle;
 import Obstacle.Spikes;
@@ -82,9 +84,30 @@ public class WorldContactListener implements ContactListener{
 				}else if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof FinishLine)) {
 					((FinishLine) obstacle.getUserData()).onSideHit();
 					player.setHasFinishedLevel(true);
+				}else if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof Enemy)) {
+					player.destroyPlayer();
 				}
+				
 			}
 
+		}else if (fixA.getFilterData().categoryBits==Launcher.enemyBit  || fixB.getFilterData().categoryBits==Launcher.enemyBit ) {
+			if (fixA.getFilterData().categoryBits==Launcher.enemyBit && fixB.getFilterData().categoryBits==Launcher.objectBit) {
+				if (((Enemy) fixA.getUserData()).whichDragon().equals("red")) {
+					((Enemy) fixA.getUserData()).reverseDirection(true, false);
+				}else {
+					((Enemy) fixA.getUserData()).reverseDirection(false, true);
+				}
+				
+				
+			}else if (fixA.getFilterData().categoryBits==Launcher.objectBit){
+				if (((Enemy) fixB.getUserData()).whichDragon().equals("red")) {
+					((Enemy) fixB.getUserData()).reverseDirection(true, false);
+				}else {
+					((Enemy) fixB.getUserData()).reverseDirection(false, true);
+				}
+				
+			}
+			
 		}
 		
 	}

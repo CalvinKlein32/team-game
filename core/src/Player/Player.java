@@ -121,7 +121,7 @@ public class Player extends Sprite {
 		CircleShape shape = new CircleShape();
 		shape.setRadius(10/Launcher.PPM);
 		fdef.filter.categoryBits = Launcher.playerBit;
-		fdef.filter.maskBits = Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit;
+		fdef.filter.maskBits = Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit| Launcher.enemyBit| Launcher.doorBit;
 		
 		fdef.shape=shape;
 		f=b2body.createFixture(fdef);
@@ -170,7 +170,7 @@ public class Player extends Sprite {
 	
 	public void revivePlayer() {
 		Filter filter= new Filter();
-		filter.maskBits= Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit;;
+		filter.maskBits= Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit| Launcher.enemyBit| Launcher.doorBit;
 		isDead=false;
 		respawnTimer=50;
 		for (Fixture fixture: b2body.getFixtureList()) {

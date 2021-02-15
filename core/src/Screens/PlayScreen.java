@@ -31,6 +31,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import Collisions.WorldContactListener;
 import Levels.LevelCreator;
+import Obstacle.Dragon;
+import Obstacle.Enemy;
 import Player.Player;
 import Questions.Question;
 import uc.ac.aston.game.Launcher;
@@ -49,7 +51,7 @@ public class PlayScreen implements Screen{
 	private Box2DDebugRenderer b2;
 	private Player player;
 	private TextureAtlas atlas;
-	LevelCreator levels;
+	private LevelCreator levels;
 	WorldContactListener detectCollision;
 	private Player player2;
 	private float startX= (float) 0.8;
@@ -62,6 +64,7 @@ public class PlayScreen implements Screen{
 	private boolean waitingToMoveLevel=false;
 	private boolean signalToMoveLevelReceived=false;
 	private boolean hasGameEnded=false;
+	//private Dragon dragon;
 	
 	
 	public PlayScreen(Launcher theGame,int level,int score) {
@@ -84,10 +87,11 @@ public class PlayScreen implements Screen{
 		player = new Player(world,this);
 		player.b2body.setTransform(new Vector2(1,3),0);
 		player2= null;
-		levels= new LevelCreator(map,world);
+		levels= new LevelCreator(map,world, this);
 		detectCollision= new WorldContactListener(player);
 		world.setContactListener(detectCollision);
 		listOfQuestions= new Question();
+		//dragon = new Dragon (this, 2, 3);
 		
 
 		
@@ -137,6 +141,14 @@ public class PlayScreen implements Screen{
 		if (player2!=null) {
 			player2.draw(theGame.batch);
 		}
+		//dragon.draw(theGame.batch);
+		
+		for (Enemy dragon : levels.getDragons()) {
+			dragon.draw(theGame.batch);
+		}
+		
+		
+		
 		theGame.batch.end();
 		
 	}
@@ -206,6 +218,13 @@ public class PlayScreen implements Screen{
 		
 		
 		player.update(delta);
+		
+		for (Enemy dragon:levels.getDragons()) {
+			dragon.update(delta);
+		}
+		
+		
+		//dragon.update(delta);
 		if (player2!=null) {
 			player2.update(delta);
 		}
@@ -278,6 +297,10 @@ public class PlayScreen implements Screen{
 
 	public TextureAtlas getAtlass() {
 		return atlas;
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 
 	@Override

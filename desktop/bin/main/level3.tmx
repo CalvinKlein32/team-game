@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="250" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="246">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="256">
  <tileset firstgid="1" name="sky_cloud" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="418" columns="38">
   <image source="tilesets/sky_cloud.png" width="688" height="211"/>
  </tileset>
@@ -224,6 +224,18 @@
  </objectgroup>
  <objectgroup id="13" name="FinishLine">
   <object id="242" x="3969.33" y="38.6667" width="10.6667" height="345.333"/>
+ </objectgroup>
+ <objectgroup id="14" name="Enemy Bounds">
+  <object id="247" x="2748" y="241" width="3" height="118"/>
+  <object id="248" x="2997" y="243" width="2" height="119"/>
+  <object id="253" x="1965" y="350" width="69"/>
+  <object id="254" x="1961" y="62" width="73"/>
+ </objectgroup>
+ <objectgroup id="15" name="Dragon">
+  <object id="246" x="2859" y="329" width="34" height="31"/>
+ </objectgroup>
+ <objectgroup id="16" name="BlueDragon">
+  <object id="255" x="1985" y="129" width="33" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="Fruits">
   <object id="187" x="2338.33" y="86.3333" width="1"/>
