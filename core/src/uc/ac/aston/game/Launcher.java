@@ -54,7 +54,7 @@ public class Launcher extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		screen = new PlayScreen(this,5,0);
+		screen = new PlayScreen(this,currentLevel,0);
 		setScreen(screen);
 		connectSocket();
 		configSocketEvents();
