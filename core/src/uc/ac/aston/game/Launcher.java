@@ -174,11 +174,11 @@ public class Launcher extends Game {
 	}
 	
 	/**
-	 * Connects the socket to the server via URL adresss. 
+	 * Connects the socket to the server via URL addresses. 
 	 */
 	public void connectSocket() {
 		try{
-			socket =IO.socket("http://localhost:8080");
+			socket =IO.socket("https://arcane-taiga-94757.herokuapp.com/");
 			socket.connect();
 		}catch(Exception e) {
 			System.out.println(e);
@@ -258,18 +258,16 @@ public class Launcher extends Game {
 			//lobby as them, if a player is found it creates an instance of the opposing player in their current screen.
 			@Override
 			public void call(Object... args) {
-				JSONArray objects = (JSONArray)args[0];
-				for (int i=0; i<objects.length();i++) {
-					try {
-						int playerLobby=objects.getJSONObject(i).getInt("lobby");
-						if (lobbyNum==playerLobby) {
-							screen.createPlayer2();
-						}
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				JSONObject data = (JSONObject) args[0];
+				try{
+					int count=data.getInt("playersInLobby");
+					lobbyNum=data.getInt("lobby");
+					System.out.println("this is player number "+count+" in lobby number "+lobbyNum);
+					if (count==2) {
+						screen.createPlayer2();
 					}
-					//System.out.println(lobbyNum);	
+				}catch(JSONException e) {
+					Gdx.app.log("SocketIO", "Error in fetching new player");
 				}
 				
 				
