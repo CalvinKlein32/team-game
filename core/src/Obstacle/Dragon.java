@@ -14,10 +14,15 @@ import Screens.PlayScreen;
 import uc.ac.aston.game.Launcher;
 
 public class Dragon extends Enemy{
+	//stateTime is a float that keeps track of the amount of time the player stays in a particular state.
 	private float stateTime;
+	//walkingLeft is as an Animation made of a series  textures correlated to when the player is moving left.
 	private Animation<TextureRegion> walkingLeft;
+	//walkingRight is as an Animation made of a series  textures correlated to when the player is moving right.
 	private Animation<TextureRegion> walkingRight;
+	//frames is a list of textures that are involved in the animations.
 	Array<TextureRegion> frames;
+	//atlas is where all the textures are loaded form which particular regions would be selected.
 	TextureAtlas atlas;
 	
 
@@ -40,6 +45,10 @@ public class Dragon extends Enemy{
 		setBounds(0,32,64/Launcher.PPM,64/Launcher.PPM);
 	}
 	
+	/**
+	 * updates the movement of the BlueDragon by making sure to change animation and moving towards right direction and right speed.
+	 */
+	@Override
 	public void update(float dt) {
 		stateTime +=dt;
 		b2body.setLinearVelocity(velocity);
@@ -52,6 +61,9 @@ public class Dragon extends Enemy{
 		
 	}
 
+	/**
+	 * Defines the dragon by creating a Body object of it with the appropriate fixtures. 
+	 */
 	@Override
 	protected void define() {
 		BodyDef character = new BodyDef();
@@ -71,6 +83,9 @@ public class Dragon extends Enemy{
 		
 	}
 
+	/**
+	 * specifies the type of Dragon.
+	 */
 	@Override
 	public String whichDragon() {
 		return ("red");

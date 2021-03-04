@@ -19,8 +19,16 @@ import Obstacle.Spikes;
 import Player.Player;
 import uc.ac.aston.game.Launcher;
 
+/**
+ * 
+ * WorldContactListener is the class that manages the collisions between objects, more specifically when two fixtures associated
+ * with Body objects come in contact against each other.
+ *
+ */
 public class WorldContactListener implements ContactListener{
+	//The player instance that has been in contact with another object.
 	private Player player;
+	//doGenerateQuestion boolean variable that checks whether is time to generate questions or not. 
 	private boolean doGenerateQuestion;
 	
 	public WorldContactListener(Player player) {
@@ -30,11 +38,25 @@ public class WorldContactListener implements ContactListener{
 	
 
 
+	/**
+	 * beginContact is the method that is called when two objects in the world come in contact, it handles contact between:
+	 * the feet fixture of the player and the spike fixture.
+	 * the feet fixture of the player and the sea fixture.
+	 * the front or back fixture of the player and the spike fixture.
+	 * the front or back fixture of the player and the Door fixture.
+	 * any fixture of the player against the enemy fixture(which could be blue or red dragon).
+	 *  
+	 */
 	@Override
 	public void beginContact(Contact contact) {
 		
+		//fixA is the first fixture that was involved in the contact between the two objects.
 		Fixture fixA= contact.getFixtureA();
+		//fixA is the second fixture that was involved in the contact between the two objects.
 		Fixture fixB= contact.getFixtureB();
+		
+		//When one of the fixture is feet of a player we identify which one is it, if the other fixture is an InteractiveObstacle meaning that it 
+		//has been in contact with an obstacle the player dies.
 		if (fixA.getUserData()=="feet" || fixB.getUserData()=="feet") {
 			Fixture feet;
 			Fixture obstacle;
@@ -45,13 +67,15 @@ public class WorldContactListener implements ContactListener{
 				feet=fixB;
 				obstacle=fixA;
 			}
+			
 			if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof InteractiveObstacle)) {
-				((InteractiveObstacle) obstacle.getUserData()).onFeetHit();
 				if ((player.b2body.getFixtureList().contains(feet, true))){
 					player.destroyPlayer();
 				};
 			}
 		
+		//When one of the fixture is side (either left or right) of a player we identify which one is it, and based on what the other object
+		//the player has run into we perform an action.
 		}else if (fixA.getUserData()=="side" || fixB.getUserData()=="side") {
 			Fixture side;
 			Fixture obstacle;
@@ -62,16 +86,13 @@ public class WorldContactListener implements ContactListener{
 				side=fixB;
 				obstacle=fixA;
 			}
+			
 			if (player.b2body.getFixtureList().contains(side, true)) {
+				//If the Object the player has ran into is a Spike object the player dies.
 				if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof Spikes)) {
-					((Spikes) obstacle.getUserData()).onSidehit();
 					player.destroyPlayer();
 					
-					//System.out.println("been hit"+side.toString());
-//					if ((player.b2body.getFixtureList().contains(side, true))){
-//						player.destroyPlayer();
-//					};
-					
+		        //If the Object the player has ran into is a Door object we can validate question generation.	
 				}else if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof Door)) {
 					if (!player.getCanOpenDoor()) {
 						doGenerateQuestion=true;
@@ -79,17 +100,18 @@ public class WorldContactListener implements ContactListener{
 						((Door) obstacle.getUserData()).destroyDoorCells();
 						player.setCanOpenDoor(false);
 					}
-					
-					
+				//If the Object the player has ran into is a FinishLine object we can make the player aware that they have finished their level.	
 				}else if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof FinishLine)) {
-					((FinishLine) obstacle.getUserData()).onSideHit();
 					player.setHasFinishedLevel(true);
+				//If the Object the player has ran into an Enemy object we destroy the player.
 				}else if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof Enemy)) {
 					player.destroyPlayer();
 				}
 				
 			}
 
+		//When an Enemy hits an object (which are the Enemy Bounds object), the enemy is told to reverse speed, if it is a red dragon it reverses
+		//speed in the X direction, if the dragon is blue it reverses speed in the y direction.
 		}else if (fixA.getFilterData().categoryBits==Launcher.enemyBit  || fixB.getFilterData().categoryBits==Launcher.enemyBit ) {
 			if (fixA.getFilterData().categoryBits==Launcher.enemyBit && fixB.getFilterData().categoryBits==Launcher.objectBit) {
 				if (((Enemy) fixA.getUserData()).whichDragon().equals("red")) {
@@ -111,6 +133,7 @@ public class WorldContactListener implements ContactListener{
 		}
 		
 	}
+	
 	
 	public void resetGenerateQuestion() {
 		doGenerateQuestion=false;

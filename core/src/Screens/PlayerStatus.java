@@ -12,19 +12,27 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import uc.ac.aston.game.Launcher;
 
+/**
+ *
+ *PlayerStatus is a Class for displaying players details and their progress during run time of the game.
+ */
 
 public class PlayerStatus implements Disposable{
+	//stage is the environment that can be viewed.
 	public Stage stage;
+	//view handles what is seen in the screen. 
 	private Viewport view;
-	
+	//level Integer indicating player's current Level;
 	private Integer level;
+	//score Integer indicating player's current Score;
 	private Integer score;
+	//user string indicating ID of the player in the lobby.
 	private String user;
-	
-	Label scoreLabel;
-	Label levelLabel;
-	Label theScore;
-	Label theLevel;
+	//labels to display text
+	private Label scoreLabel;
+	private Label levelLabel;
+	private Label theScore;
+	private Label theLevel;
 	
 	public PlayerStatus(SpriteBatch batch, int level, int score){
 		this.score=score;
@@ -36,12 +44,14 @@ public class PlayerStatus implements Disposable{
 		Table table = new Table();
 		table.top();
 		table.setFillParent(true);
-		
+		//labels to represent the actual values of score and level;
 		scoreLabel = new Label (String.format("%03d", score), new Label.LabelStyle(new BitmapFont(),Color.WHITE));
 		levelLabel = new Label (String.format("%02d", level), new Label.LabelStyle(new BitmapFont(),Color.WHITE));
+		//labels to represent the literal text 
 		theScore = new Label ("SCORE", new Label.LabelStyle(new BitmapFont(),Color.WHITE));
 		theLevel = new Label ("LEVEL", new Label.LabelStyle(new BitmapFont(),Color.WHITE));
 		
+		//layout specified using a Table structure
 		table.add(theScore).expandX().padTop(10);
 		table.add(theLevel).expandX().padTop(10);
 		table.row();

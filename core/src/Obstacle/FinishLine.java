@@ -12,18 +12,17 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import uc.ac.aston.game.Launcher;
 
+/**
+ * Finish Line object that represents end of a level for a player. The Finish Line object is created and the fixtures are defined
+ *
+ */
 public class FinishLine {
-	private World world;
-	private TiledMap map;
-	private TiledMapTile tile;
-	private Rectangle bounds;
+	//the body object that would represent the finish line.
 	private Body body;
+	//Fixture associated with the finish line.
 	private Fixture fixture;
 	
 	public FinishLine(World world,TiledMap map, Rectangle bounds) {
-		this.world = world;
-		this.map=map;
-		this.bounds=bounds;
 		BodyDef bdef = new BodyDef();
 		PolygonShape actor = new PolygonShape();
 		FixtureDef f = new  FixtureDef();
@@ -36,7 +35,4 @@ public class FinishLine {
 		fixture.setUserData(this);
 	}
 	
-	public void onSideHit() {
-		System.out.println("You finished this level");
-	}
 }

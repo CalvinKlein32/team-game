@@ -12,11 +12,19 @@ import com.badlogic.gdx.utils.Array;
 import Screens.PlayScreen;
 import uc.ac.aston.game.Launcher;
 
+/**
+ * BlueDragon object that represents a type of Enemy that is a blue dragon that flies vertically and must be avoided by the player.
+ *
+ */
 public class BlueDragon extends Enemy{
 	
+	//stateTime is a float that keeps track of the amount of time the player stays in a particular state.
 	private float stateTime;
+	//flying is as an Animation made of a series  textures correlated to when the player is flying.
 	private Animation<TextureRegion> flying;
+	//frames is a list of textures that are involved in the flying animation.
 	Array<TextureRegion> frames;
+	//atlas is where all the textures are loaded form which particular regions would be selected.
 	TextureAtlas atlas;
 
 	public BlueDragon(PlayScreen screen, float x, float y) {
@@ -33,6 +41,9 @@ public class BlueDragon extends Enemy{
 	
 	}
 
+	/**
+	 * Defines the dragon by creating a Body object of it with the appropriate fixtures. 
+	 */
 	@Override
 	protected void define() {
 		BodyDef character = new BodyDef();
@@ -51,6 +62,9 @@ public class BlueDragon extends Enemy{
 		
 	}
 
+	/**
+	 * updates the movement of the BlueDragon by making sure to change animation and moving towards right direction and right speed.
+	 */
 	@Override
 	public void update(float dt) {
 		stateTime +=dt;
@@ -60,6 +74,9 @@ public class BlueDragon extends Enemy{
 		
 	}
 
+	/**
+	 * specifies the type of Dragon.
+	 */
 	@Override
 	public String whichDragon() {
 		return ("blue");

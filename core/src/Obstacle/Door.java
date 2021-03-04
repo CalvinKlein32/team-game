@@ -17,17 +17,22 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import uc.ac.aston.game.Launcher;
 
+/**
+ * Door object that represents an obstacles from the player. The Door object is created and the fixtures are defined
+ *
+ */
 public class Door {
 
-	private World world;
+	//map variable that would be used to contain a TiledMap, TiledMAp is map made of textures where a basic unit is a Tile.
 	private TiledMap map;
-	private TiledMapTile tile;
+	//bounds is the rectangular bounds of the Door object.
 	private Rectangle bounds;
+	//the body object that would represent the Door.
 	private Body body;
+	//Fixture associated with the Door.
 	private Fixture fixture;
 	
 	public Door(World world, TiledMap map, Rectangle bounds) {
-		this.world = world;
 		this.map=map;
 		this.bounds=bounds;
 		BodyDef bdef = new BodyDef();
@@ -44,14 +49,11 @@ public class Door {
 		
 	}
 	
-	public void onSidehit() {
-		Gdx.app.log("Door","Collision");
 
-
-		
-
-		
-	}
+	/**
+	 * Changes the fixture of the Door to have different characteristics and to be identified differently.
+	 * @param filterBit is a short value that would change the property of the fixture.
+	 */
 	
 	public void setCategoryFilter(short filterBit) {
 		Filter filter = new Filter();
@@ -59,9 +61,12 @@ public class Door {
 		fixture.setFilterData(filter);
 	}
 	
+	/**
+	 * Destroys the physical cells that make uo the door by taking away the tiles of the door from the TiledMap.
+	 */
 	public void destroyDoorCells(){
 		setCategoryFilter(Launcher.destroyedBit);
-
+		//index 3 in the TileMap is used for the layer on which the door was constructed on.
 		TiledMapTileLayer layer= (TiledMapTileLayer) map.getLayers().get(3);
 		int dx=Math.round(bounds.getX()/16);
 		int dy=((int)(bounds.getY())/16);

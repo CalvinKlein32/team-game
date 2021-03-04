@@ -7,6 +7,10 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import uc.ac.aston.game.Launcher;
 
+/**
+ * Spikes object that represents an obstacles for the player. Fixture are associated with it so it can be identified.
+ *
+ */
 public class Spikes extends InteractiveObstacle{
 
 	public Spikes(World world, TiledMap map, Rectangle bounds) {
@@ -15,15 +19,7 @@ public class Spikes extends InteractiveObstacle{
 		setCategoryFilter(Launcher.spikeBit);
 	}
 
-	@Override
-	public void onFeetHit() {
-		Gdx.app.log("Spikes","Collision");
-		
-		
-	}
+
 	
-	public void onSidehit() {
-		Gdx.app.log("Spikes","Collision");
-	}
 	
 }

@@ -13,18 +13,13 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import uc.ac.aston.game.Launcher;
 
-public abstract class InteractiveObstacle {
-	protected World world;
-	protected TiledMap map;
-	protected TiledMapTile tile;
-	protected Rectangle bounds;
+public class InteractiveObstacle {
+	//the body object that would represent the obstacle..
 	protected Body body;
+	//Fixture associated with the obstacle.
 	protected Fixture fixture;
 	
 	public InteractiveObstacle(World world,TiledMap map, Rectangle bounds) {
-		this.world = world;
-		this.map=map;
-		this.bounds=bounds;
 		BodyDef bdef = new BodyDef();
 		PolygonShape actor = new PolygonShape();
 		FixtureDef f = new  FixtureDef();
@@ -37,8 +32,11 @@ public abstract class InteractiveObstacle {
 		
 	}
 	
-	public abstract void onFeetHit();
 	
+	/**
+	 * Sets the fixture of the obstacle to be identified differently.
+	 * @param filterBit is a short value that would change the property of the fixture.
+	 */
 	public void setCategoryFilter(short filterBit) {
 		Filter filter = new Filter();
 		filter.categoryBits= filterBit;

@@ -14,10 +14,16 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import uc.ac.aston.game.Launcher;
 
+/**
+ * Screen that is showed at the end of the game displaying the results.
+ *
+ */
 public class GameOverScreen implements Screen{
-	
+	//view handles what is seen in the screen. 
 	private Viewport view;
+	//stage is the environment that can be viewed.
 	private Stage stage;
+	// variable containing the Launcher class that handles the different screens;
 	private Launcher game;
 	
 	public GameOverScreen(Launcher game, int position, int points, int otherPlayerPoints) {
@@ -41,12 +47,14 @@ public class GameOverScreen implements Screen{
 			results+= " position with "+points+" points, and your opponent finished with "+otherPlayerPoints + " points.";
 
 		}
-				
+		//label that shows the results and dimension		
 		Label gameResults= new Label(results,font);
 		gameResults.setWrap(true);
 		gameResults.setWidth(350);
+		//label displaying game over.
 		Label gameOverText= new Label("Game Over !!!",font);
 		
+		//layout specified using a Table structure
 		Table table = new Table();
 		table.setFillParent(true);
 		
@@ -64,9 +72,11 @@ public class GameOverScreen implements Screen{
 		
 	}
 
+	/**
+	 * Renders content of the stage, with a black background.
+	 */
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.draw();

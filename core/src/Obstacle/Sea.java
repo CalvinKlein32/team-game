@@ -7,6 +7,11 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import uc.ac.aston.game.Launcher;
 
+/**
+* Sea object that represents an obstacles for the player. Fixture are associated with it so it can be identified.
+*
+*/
+
 public class Sea extends InteractiveObstacle{
 
 	public Sea(World world, TiledMap map, Rectangle bounds) {
@@ -15,10 +20,6 @@ public class Sea extends InteractiveObstacle{
 		setCategoryFilter(Launcher.seaBit);
 	}
 
-	@Override
-	public void onFeetHit() {
-		Gdx.app.log("Sea","Collision");
-		
-	}
+
 
 }
