@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import uc.ac.aston.game.Launcher;
 
-public class InteractiveObstacle {
+public abstract class InteractiveObstacle {
 	//the body object that would represent the obstacle..
 	protected Body body;
 	//Fixture associated with the obstacle.
@@ -43,5 +43,7 @@ public class InteractiveObstacle {
 		fixture.setFilterData(filter);
 		
 	}
+	
+	public abstract void collisionSound();
 
 }

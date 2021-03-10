@@ -1,6 +1,7 @@
 package Collisions;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -70,6 +71,9 @@ public class WorldContactListener implements ContactListener{
 			
 			if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof InteractiveObstacle)) {
 				if ((player.b2body.getFixtureList().contains(feet, true))){
+					if (Launcher.isSoundOn) {
+						((InteractiveObstacle)obstacle.getUserData()).collisionSound();
+					}
 					player.destroyPlayer();
 				};
 			}
@@ -90,6 +94,9 @@ public class WorldContactListener implements ContactListener{
 			if (player.b2body.getFixtureList().contains(side, true)) {
 				//If the Object the player has ran into is a Spike object the player dies.
 				if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof Spikes)) {
+					if (Launcher.isSoundOn) {
+						((Spikes)obstacle.getUserData()).collisionSound();
+					}
 					player.destroyPlayer();
 					
 		        //If the Object the player has ran into is a Door object we can validate question generation.	

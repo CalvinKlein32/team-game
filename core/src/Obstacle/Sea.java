@@ -1,6 +1,7 @@
 package Obstacle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
@@ -18,6 +19,12 @@ public class Sea extends InteractiveObstacle{
 		super(world, map, bounds);
 		fixture.setUserData(this);
 		setCategoryFilter(Launcher.seaBit);
+	}
+
+	@Override
+	public void collisionSound() {
+		Launcher.manager.get("music/WaterDrop.mp3", Music.class).play();
+		
 	}
 
 

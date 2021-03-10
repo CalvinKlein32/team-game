@@ -1,6 +1,7 @@
 package Obstacle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
@@ -17,6 +18,12 @@ public class Spikes extends InteractiveObstacle{
 		super(world, map, bounds);
 		fixture.setUserData(this);
 		setCategoryFilter(Launcher.spikeBit);
+	}
+
+	@Override
+	public void collisionSound() {
+		Launcher.manager.get("music/Dead.mp3", Music.class).play();
+		
 	}
 
 

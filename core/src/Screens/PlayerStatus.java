@@ -31,8 +31,12 @@ public class PlayerStatus implements Disposable{
 	//labels to display text
 	private Label scoreLabel;
 	private Label levelLabel;
+	private Label statusLabel;
 	private Label theScore;
 	private Label theLevel;
+	private Label status;
+	private boolean hasGameStarted =false;
+	private String statusText= "waiting for opponent player to connect ...";
 	
 	public PlayerStatus(SpriteBatch batch, int level, int score){
 		this.score=score;
@@ -46,17 +50,24 @@ public class PlayerStatus implements Disposable{
 		table.setFillParent(true);
 		//labels to represent the actual values of score and level;
 		scoreLabel = new Label (String.format("%03d", score), new Label.LabelStyle(new BitmapFont(),Color.WHITE));
-		levelLabel = new Label (String.format("%02d", level), new Label.LabelStyle(new BitmapFont(),Color.WHITE));
+		levelLabel = new Label (String.format("%02d", level), new Label.LabelStyle(new BitmapFont(),Color.WHITE)); 
 		//labels to represent the literal text 
 		theScore = new Label ("SCORE", new Label.LabelStyle(new BitmapFont(),Color.WHITE));
 		theLevel = new Label ("LEVEL", new Label.LabelStyle(new BitmapFont(),Color.WHITE));
+		status = new Label ("STATUS", new Label.LabelStyle(new BitmapFont(),Color.WHITE));
+		statusLabel= new Label (statusText, new Label.LabelStyle(new BitmapFont(),Color.WHITE));
+		statusLabel.setWrap(true);
+		statusLabel.setWidth(150);
+		
 		
 		//layout specified using a Table structure
 		table.add(theScore).expandX().padTop(10);
 		table.add(theLevel).expandX().padTop(10);
+		table.add(status).expandX().padTop(10);
 		table.row();
 		table.add(scoreLabel).expandX();
 		table.add(levelLabel).expandX();
+		table.add(statusLabel).width(150).expandX();
 		
 		stage.addActor(table);
 		
@@ -64,6 +75,12 @@ public class PlayerStatus implements Disposable{
 		
 		
 		
+	}
+	
+	public void update(String theStatus) {
+		if (!theStatus.equals(statusText)) {
+			this.statusLabel.setText(theStatus);
+		}
 	}
 
 	@Override

@@ -14,6 +14,8 @@ import org.json.JSONObject;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.socket.client.*;
 import io.socket.emitter.Emitter;
 import Screens.GameOverScreen;
+import Screens.HomeScreen;
 import Screens.PlayScreen;
 
 public class Launcher extends Game {
@@ -51,7 +54,7 @@ public class Launcher extends Game {
 	//current timer related to the update_TIME
 	private float timer;
 	//Integer indicating the Lobby in which player is in.
-	private int lobbyNum=1;
+	private int lobbyNum=-1;
 	//Boolean to check if the current player has finished their current level.
 	private boolean hasPlyerFiniehed=false;
 	//Boolean to check if opponent player that is in the same lobby has finished the level.
@@ -63,6 +66,16 @@ public class Launcher extends Game {
 	//The points which the opponent player possesses, (incremented after completing each level)
 	private int opponentFinalPoints=0;
 	
+	public static AssetManager manager;
+	
+	private int numPlayer=-1;
+	
+	public static boolean isSoundOn=true;
+	
+	public static boolean isMusicOn=true;
+	
+	//private HomeScreen homePage;
+	
 	
 	/**
 	 * Displays the first screen of the game, which consist of the first level of the game. Initiates command to connect the socket to the server
@@ -71,8 +84,15 @@ public class Launcher extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		screen = new PlayScreen(this,currentLevel,0);
-		setScreen(screen);
+		manager=new AssetManager();
+		manager.load("music/Background.wav", Music.class);
+		manager.load("music/CorrectAnswer.wav", Music.class);
+		manager.load("music/Dead.mp3", Music.class);
+		manager.load("music/Jump.wav", Music.class);
+		manager.load("music/WaterDrop.mp3", Music.class);
+		manager.load("music/WrongAnswer.wav", Music.class);
+		manager.finishLoading();
+		setScreen(new HomeScreen(this));
 		connectSocket();
 		configSocketEvents();
 		
@@ -85,6 +105,29 @@ public class Launcher extends Game {
 	public void render () {
 		super.render();
 
+		
+	}
+	
+	
+	public void findLobby(int levelChoosed, boolean isSoundOn, boolean isMusicOn) {
+		this.currentLevel=levelChoosed;
+		this.isSoundOn=isSoundOn;
+		this.isMusicOn=isMusicOn;
+		if (screen!=null) {
+			screen.dispose();
+		}
+		screen = new PlayScreen(this,currentLevel,0);
+		setScreen(screen);
+		JSONObject data = new JSONObject();
+		
+		try {
+			data.put("level", currentLevel);
+			socket.emit("findLobbyByLevel", data);
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+			
+		
 		
 	}
 	
@@ -111,10 +154,12 @@ public class Launcher extends Game {
 		}else {
 			score=screen.getCurrentSore()+50;
 		}
+		System.out.print(currentLevel);
 		if (currentLevel<6) {
 			screen = new PlayScreen(this,currentLevel,score);
 			setScreen(screen);
 			screen.createPlayer2();
+			screen.allowMovement();
 			System.out.println("Congratulations you finished the level in position: "+position);
 		}else {
 			finalPoints=score;
@@ -159,8 +204,13 @@ public class Launcher extends Game {
 	public void updateHasPlayerFinished() {
 		hasPlyerFiniehed=true;
 		if (hasTheOtrerPlyerFiniehed) {
+			//currentLevel++;
+			screen.setEndingresult(2);
+			//screen.changeToAdvancing();
+			screen.setSignalToMoveLevelReceived(true);
+			//nextLevel(2);
+		}else {
 			currentLevel++;
-			nextLevel(2);
 		}
 		JSONObject data = new JSONObject();
 		try{
@@ -170,6 +220,9 @@ public class Launcher extends Game {
 		}catch(JSONException e) {
 			Gdx.app.log("SocketIO", "Error in sending has player finished ");
 		}
+		
+		
+		
 		
 	}
 	
@@ -184,6 +237,32 @@ public class Launcher extends Game {
 			System.out.println(e);
 		}
 	}
+	
+	
+/*	public void newGame() {
+		currentLevel=0;
+		screen = new PlayScreen(this,currentLevel,0);
+		setScreen(screen);
+		JSONObject data = new JSONObject();
+		if (numPlayer==2){
+			try {
+				data.put("lobbyNum", lobbyNum);
+				socket.emit("readyTostart", data);
+				screen.createPlayer2();
+				screen.allowMovement();
+			}catch(Exception e) {
+				System.out.println(e);
+			}
+			
+		}
+	}
+	*/
+	
+	public void newGame() {
+		setScreen(new HomeScreen(this));
+	}
+	
+	
 	
 	/**
 	 * Handles the various events it receives from the server with adequate action.
@@ -229,8 +308,29 @@ public class Launcher extends Game {
 					int count=data.getInt("playersInLobby");
 					lobbyNum=data.getInt("lobby");
 					System.out.println("this is player number "+count+" in lobby number "+lobbyNum);
-					if (count==1) {
+					if (count==2) {
+						data.put("lobbyNum", lobbyNum);
+						socket.emit("readyTostart", data);
 						screen.createPlayer2();
+						screen.allowMovement();
+					}
+				}catch(JSONException e) {
+					Gdx.app.log("SocketIO", "Error in fetching new player");
+				}
+				
+			}
+		}).on("readyTostart", new Emitter.Listener() {
+			
+			//When the client receives a newPlayer event it creates the instance for the opposing player in their current screen.
+			@Override
+			public void call(Object... args) {
+				JSONObject data = (JSONObject) args[0];
+				try{
+					int count=data.getInt("lobbyNum");
+					//System.out.println("this is player number "+count+" in lobby number "+lobbyNum);
+					if (count==lobbyNum) {
+						screen.createPlayer2();
+						screen.allowMovement();
 					}
 				}catch(JSONException e) {
 					Gdx.app.log("SocketIO", "Error in fetching new player");
@@ -244,32 +344,26 @@ public class Launcher extends Game {
 			public void call(Object... args) {
 				JSONObject data = (JSONObject) args[0];
 				try{
-					String id = data.getString("id");
-					Gdx.app.log("SocketIO", " Player disconnected ID: "+id);
+					int lobbyTocheck= data.getInt("oldLobby");
+					if (lobbyTocheck==lobbyNum) {
+						//newGame();
+						lobbyNum = -1;
+						numPlayer= -1;
+						System.out.print("coming from "+lobbyTocheck+" Player going to "+lobbyNum+" to become player number "+numPlayer);
+						screen.changeToDisconnecting();
+/*						if (count==2){
+							data.put("lobbyNum", lobbyNum);
+							socket.emit("readyTostart", data);
+							screen.createPlayer2();
+							screen.allowMovement();
+						}
+						*/
+					}
+					//Gdx.app.log("SocketIO", "You have been moved up to lobby: "+lobbyNum);
 					//lobbyFull=true;
 				}catch(JSONException e) {
-					Gdx.app.log("SocketIO", "Error in fetching discoeccted player");
+					Gdx.app.log("SocketIO", "Error in fetching disconneccted player");
 				}
-				
-			}
-		}).on("getPlayers", new Emitter.Listener() {
-			
-			//When the client receives a getPlayers event it checks if there is a player among the list of player it receives it is in the same 
-			//lobby as them, if a player is found it creates an instance of the opposing player in their current screen.
-			@Override
-			public void call(Object... args) {
-				JSONObject data = (JSONObject) args[0];
-				try{
-					int count=data.getInt("playersInLobby");
-					lobbyNum=data.getInt("lobby");
-					System.out.println("this is player number "+count+" in lobby number "+lobbyNum);
-					if (count==2) {
-						screen.createPlayer2();
-					}
-				}catch(JSONException e) {
-					Gdx.app.log("SocketIO", "Error in fetching new player");
-				}
-				
 				
 			}
 		}).on("playerMoved", new Emitter.Listener() {
@@ -309,10 +403,15 @@ public class Launcher extends Game {
 						hasTheOtrerPlyerFiniehed=data.getBoolean("playerFinished");
 						if (hasPlyerFiniehed) {
 							System.out.println("Ready to move to the next level. came in 1st position");
-							
-							currentLevel++;
 							screen.setSignalToMoveLevelReceived(true);
-						}
+							//currentLevel++;
+							
+						}else {
+							currentLevel++;
+							screen.changeToConcluidng();
+							screen.setEndingresult(2);
+						}	
+						
 					}		
 				}catch(JSONException e) {
 					Gdx.app.log("SocketIO", "Error in getting players movement");

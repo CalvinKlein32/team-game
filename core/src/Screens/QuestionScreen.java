@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -152,7 +153,15 @@ public class QuestionScreen implements Screen{
 	public void render(float delta) {
 		if (Gdx.input.isKeyPressed(Input.Keys.Q)|(hasButtonBeenPressed)){
 			if (isAnswerCorrect) {
+				if (Launcher.isSoundOn) {
+					Launcher.manager.get("music/CorrectAnswer.wav", Music.class).play();
+				}
 				playScreen.unlockDoor();
+			}else {
+				playScreen.playerFrozen();
+				if (Launcher.isSoundOn) {
+					Launcher.manager.get("music/WrongAnswer.wav", Music.class).play();
+				}
 			}
 			playScreen.returnToPlayScreen();
 			game.setScreen(playScreen);
