@@ -180,7 +180,7 @@ public class PlayScreen implements Screen{
 		b2.render(world, cam.combined);
 		//when a door has been hit it changes to the screen to a new QuestionScreen where user would answer questions
 		if (detectCollision.getDoGenerateQuestion()) {
-			theGame.setScreen(new QuestionScreen(theGame,this,listOfQuestions));
+			theGame.setScreen(new QuestionScreen(theGame,this,listOfQuestions, currentLevel));
 		}
 		
 		

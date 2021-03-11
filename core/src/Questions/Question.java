@@ -26,6 +26,9 @@ public class Question {
 	//englishQuestions is an arrayList of String that stores all data relating to english questions including question text, options and answers.
 	private static ArrayList<String> englishQuestions = new ArrayList<String>();
 	
+	private int numberOfQuestions=21;
+	private int linesperQuestion=7;
+	
 	
 	public Question() {
 		englishQuestions();
@@ -35,7 +38,7 @@ public class Question {
 	/**
 	 * Reads all the Maths questions from the file mathsQuestions.txt and store its content on the ArrayList mathsQuestions
 	 */
-	public static void mathsQuestions() {
+	public  void mathsQuestions() {
 		try {
 			BufferedReader br = null;
 			FileHandle fr= Gdx.files.internal("mathsQuestions.txt");
@@ -53,7 +56,7 @@ public class Question {
 	/**
 	 * Reads all the English questions from the file englishQuestions.txt and store its content on the ArrayList mathsQuestions
 	 */
-	public static void englishQuestions() {
+	public void englishQuestions() {
 	try {
 		BufferedReader br = null;
 		FileHandle fr= Gdx.files.internal("englishQuestions.txt");
@@ -73,32 +76,44 @@ public class Question {
 	 * 
 	 * @return an Array lList on strings, where index 0 is the question text, index 1 to 4 the 4 possible options and at index 5 the answer.
 	 */
-	
-	
-	public static ArrayList<String> randomQuestionGenerator() {
+		
+	public ArrayList<String> randomQuestionGenerator(int difficultyLevel) {
 		///ramdom number generator
 		Random r = new Random();
 		
-		int rand = r.nextInt((11))*7;
+		int randomSubject = r.nextInt(2);
+		int randomQuestion = new Random().nextInt(this.numberOfQuestions/3)*this.linesperQuestion;
+		
+		
+		if (difficultyLevel==2) {
+			randomQuestion+=(numberOfQuestions/3)*linesperQuestion;
+			System.out.println("yessir");
+		}else if (difficultyLevel==3) {
+			randomQuestion+= (2*numberOfQuestions/3)*linesperQuestion;
+		}
+		
+		
+		
 		ArrayList<String> tempQuestion = new ArrayList<String>();
 		
 	
 		//if the random number generator is below half the amount of lines of all questions combined, the question chose would be a math
 		//question otherwise it would be an English question
-		if (rand<42){
-			for (int m = rand; m < rand+6; m++) {
-				tempQuestion.add(mathsQuestions.get(m));
+		if (randomSubject==1){
+			for (int questionLine = randomQuestion; questionLine < randomQuestion +6; questionLine++) {
+				tempQuestion.add(mathsQuestions.get(questionLine));
 			}
-			return tempQuestion;
 		}else {
-			for (int e = rand%42; e < (rand%42)+6; e++) {
-				tempQuestion.add(englishQuestions.get(e));
+			for (int questionLine = randomQuestion; questionLine < randomQuestion +6; questionLine++) {
+				tempQuestion.add(englishQuestions.get(questionLine));
 			}
-			return tempQuestion;
 		}
-
-		
+		return tempQuestion;
 	}
+	
+	
+	
+	
 	
 
 

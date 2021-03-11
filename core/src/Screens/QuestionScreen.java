@@ -45,7 +45,7 @@ public class QuestionScreen implements Screen{
 	//ArrayList of string made of the question text, followed by 4 possible the options and the correct option.
 	private ArrayList<String> question;
 	
-	public QuestionScreen(Launcher game, PlayScreen playScreen, Question listOfQuestions) {
+	public QuestionScreen(Launcher game, PlayScreen playScreen, Question listOfQuestions, int theLevel) {
 		this.game=game;
 		view = new FitViewport(Launcher.width,Launcher.height, new OrthographicCamera());
 		this.playScreen = playScreen;
@@ -54,7 +54,14 @@ public class QuestionScreen implements Screen{
 		Gdx.input.setInputProcessor(stage);
 		Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(),Color.WHITE);
 		//question is selected randomly.
-		question = listOfQuestions.randomQuestionGenerator();
+		if (theLevel==0||theLevel==1) {
+			question = listOfQuestions.randomQuestionGenerator(1);
+		}else if (theLevel==2||theLevel==3) {
+			question = listOfQuestions.randomQuestionGenerator(2);
+		}else {
+			question = listOfQuestions.randomQuestionGenerator(3);
+		}
+		
 		
 		Table table = new Table();
 		table.setFillParent(true);
