@@ -51,6 +51,8 @@ public class Player extends Sprite {
 	//hasFinishedLevel boolean to check whether player has finished the level at which they are playing.
 	private boolean hasFinishedLevel=false;
 	
+	private boolean hasPowerUp=false;
+	
 	
 	public Player(World world, PlayScreen screen) {
 		super(screen.getAtlass().findRegion("Woodcutter_walk"));
@@ -151,7 +153,7 @@ public class Player extends Sprite {
 		//Defines how the fixture would be identified in the world.
 		fdef.filter.categoryBits = Launcher.playerBit;
 		//Defines the other fixtures that the player fixture  can collide against the world.
-		fdef.filter.maskBits = Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit| Launcher.enemyBit| Launcher.doorBit;
+		fdef.filter.maskBits = Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit| Launcher.enemyBit| Launcher.doorBit| Launcher.powerUpBit;
 		f=b2body.createFixture(fdef);
 	
 		
@@ -205,7 +207,7 @@ public class Player extends Sprite {
 	 */
 	public void revivePlayer() {
 		Filter filter= new Filter();
-		filter.maskBits= Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit| Launcher.enemyBit| Launcher.doorBit;
+		filter.maskBits= Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit| Launcher.enemyBit| Launcher.doorBit| Launcher.powerUpBit;
 		isDead=false;
 		respawnTimer=50;
 		for (Fixture fixture: b2body.getFixtureList()) {
@@ -224,6 +226,7 @@ public class Player extends Sprite {
 		for (Fixture fixture: b2body.getFixtureList()) {
 			fixture.setFilterData(filter);
 		}
+		playerStand=new TextureRegion(getTexture(),911,201,32,65);
 
 	}
 	
@@ -257,6 +260,14 @@ public class Player extends Sprite {
 
 	public void setHasFinishedLevel(boolean isLevelOver) {
 		hasFinishedLevel = isLevelOver;
+	}
+
+	public boolean getHasPowerUp() {
+		return hasPowerUp;
+	}
+
+	public void setHasPowerUp(boolean hasPowerUp) {
+		this.hasPowerUp = hasPowerUp;
 	}
 	
 

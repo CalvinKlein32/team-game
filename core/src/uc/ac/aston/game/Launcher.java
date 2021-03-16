@@ -46,6 +46,7 @@ public class Launcher extends Game {
 	public static final short destroyedBit=32;
 	public static final short enemyBit=64;
 	public static final short objectBit=128;
+	public static final short powerUpBit=256;
 	//socket class that would be used as a client to connect to a node.js server
 	private Socket socket;
 	//current game screen that the Launcher is using to run the game. For each level there is a Screen.
@@ -74,6 +75,8 @@ public class Launcher extends Game {
 	public static boolean isSoundOn=true;
 	
 	public static boolean isMusicOn=true;
+	
+	public static boolean returnToHome=false;
 	
 	//private HomeScreen homePage;
 	
@@ -131,6 +134,11 @@ public class Launcher extends Game {
 			
 		
 		
+	}
+	
+	public void disconnecting() {
+		socket.emit("leaveLevel");
+		this.returnToHome=false;
 	}
 	
 	/**
@@ -233,6 +241,7 @@ public class Launcher extends Game {
 	 */
 	public void connectSocket() {
 		try{
+			//socket =IO.socket("http://localhost:8080");
 			socket =IO.socket("https://arcane-taiga-94757.herokuapp.com/");
 			socket.connect();
 		}catch(Exception e) {

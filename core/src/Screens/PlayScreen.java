@@ -93,7 +93,7 @@ public class PlayScreen implements Screen{
 	
 	private boolean canMove=false;
 	//gameStatus represent the different status the game can be in during the run time of the game.
-	private enum gameStatus{WAITING,STARTING,PROGRESSING,FROZEN,ADVANCING,CONCLUDING,DISCONNECTING};
+	private enum gameStatus{WAITING,STARTING,PROGRESSING,FROZEN,ADVANCING,CONCLUDING,DISCONNECTING,POWER_ACTIVATED};
 	//currentStaus is the game current State.
 	private gameStatus currentStatus;
 	
@@ -106,6 +106,8 @@ public class PlayScreen implements Screen{
 	private int concludingCountdown = 20;
 	
 	private Music music;
+	
+	private boolean isLeavingLevel=false;
 	
 	
 	
@@ -135,13 +137,7 @@ public class PlayScreen implements Screen{
 		currentStatus = gameStatus.WAITING;
 		
 		music=Launcher.manager.get("music/Background.wav", Music.class);
-		if (theGame.isMusicOn) {
-			music.setLooping(true);
-			music.play();
-			
-		}else {
-			music.stop();
-		}
+		
 		
 		
 
@@ -160,6 +156,21 @@ public class PlayScreen implements Screen{
 	 */
 	@Override
 	public void render(float delta) {
+		if (theGame.isMusicOn) {
+			music.setLooping(true);
+			music.setVolume(0.1f);
+			music.play();
+			
+		}else {
+			music.stop();
+		}
+		
+		if (theGame.returnToHome) {
+			theGame.disconnecting();
+			this.currentStatus=gameStatus.DISCONNECTING;
+			this.isLeavingLevel=true;
+		}
+		
 		//Check whether a player is dead, if it is it revives it to the initial position
 		if (player.getTimer()==0) {
 			player.revivePlayer();
@@ -216,6 +227,7 @@ public class PlayScreen implements Screen{
 	 */
 	public void createPlayer2() {
 		player2=  new Player(world,this);
+		player2.makeGhost();
 		player2Position = new Vector2(1,3);
 	}
 	
@@ -239,7 +251,11 @@ public class PlayScreen implements Screen{
 				if (Launcher.isSoundOn) {
 					Launcher.manager.get("music/Jump.wav", Music.class).play();
 				}
-				player.b2body.applyLinearImpulse(new Vector2(0,4f), player.b2body.getWorldCenter(),true);
+				if (player.getHasPowerUp()) {
+					player.b2body.applyLinearImpulse(new Vector2(0,8f), player.b2body.getWorldCenter(),true);
+				}else {
+					player.b2body.applyLinearImpulse(new Vector2(0,4f), player.b2body.getWorldCenter(),true);
+				}
 				return true;
 			}
 			//if right key has been pressed and player has not surpassed the speed of 1.0 in the x axis a positive liner impulse is applied to the main player in x direction
@@ -269,6 +285,11 @@ public class PlayScreen implements Screen{
 		if (this.currentStatus==gameStatus.PROGRESSING){
 			theGame.updateServer(delta);
 		}
+		
+		if (this.currentStatus!=gameStatus.POWER_ACTIVATED & player.getHasPowerUp()) {
+			this.currentStatus=gameStatus.POWER_ACTIVATED;
+		}
+		
 		if (player2!=null) {
 			player2.b2body.setTransform(player2Position, 0);
 		}
@@ -391,7 +412,11 @@ public class PlayScreen implements Screen{
 					theGame.newGame();
 				}else {
 					canMove=false;
-					state="current opponent disconnected, moving you to a new lobby in "+countdownForStart;
+					if (isLeavingLevel) {
+						state="Returning to Home page in: "+countdownForStart;
+					}else {
+						state="current opponent disconnected, moving you to a new lobby in "+countdownForStart;
+					}
 					countdownForStart--;
 					
 				}
@@ -430,6 +455,23 @@ public class PlayScreen implements Screen{
 					canMove=true;
 				}else {
 					state="You have been freezed, you will be allowed to move again in: "+countdownForStart;
+					countdownForStart--;
+					
+				}
+				status.update(state);
+				timeCount=0;
+			}
+			break;
+		case POWER_ACTIVATED:
+			timeCount+=delta;
+			if (timeCount>=1) {
+				if (this.countdownForStart==0) {
+					state="Gooooooooooo";
+					currentStatus = gameStatus.PROGRESSING;
+					countdownForStart=5;
+					player.setHasPowerUp(false);
+				}else {
+					state="You have obtained the super jump power up, effect would be disabled in: "+countdownForStart;
 					countdownForStart--;
 					
 				}

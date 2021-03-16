@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="146">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="18" nextobjectid="147">
  <tileset firstgid="1" name="sky_cloud" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="418" columns="38">
   <image source="tilesets/sky_cloud.png" width="688" height="211"/>
  </tileset>
@@ -206,7 +206,7 @@
   <object id="73" x="3013" y="110" width="17" height="32"/>
   <object id="74" x="3109" y="112" width="17" height="33"/>
   <object id="75" x="3464" y="347" width="16" height="46"/>
-  <object id="77" x="3726" y="345" width="32" height="37"/>
+  <object id="77" x="3726" y="354" width="32" height="28"/>
  </objectgroup>
  <objectgroup id="11" name="Sea">
   <object id="114" x="646" y="395" width="501" height="82"/>
@@ -219,4 +219,5 @@
  <objectgroup id="14" name="Enemy Bounds"/>
  <objectgroup id="15" name="Dragon"/>
  <objectgroup id="16" name="BlueDragon"/>
+ <objectgroup id="17" name="Fruit"/>
 </map>

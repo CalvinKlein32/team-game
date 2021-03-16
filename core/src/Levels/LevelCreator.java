@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
+import Obstacle.ApplePowerUp;
 import Obstacle.BlueDragon;
 import Obstacle.Door;
 import Obstacle.Dragon;
@@ -107,6 +108,11 @@ public class LevelCreator {
 		for (MapObject object: map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
 			Rectangle rect = ((RectangleMapObject) object).getRectangle();
 			enemies.add(new BlueDragon(screen,rect.getX()/Launcher.PPM,rect.getY()/Launcher.PPM));
+		}
+		
+		for (MapObject object: map.getLayers().get(13).getObjects().getByType(RectangleMapObject.class)) {
+			Rectangle rect = ((RectangleMapObject) object).getRectangle();
+			new ApplePowerUp(world,map,rect);
 		}
 		
 		

@@ -5,7 +5,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -50,7 +56,8 @@ public class HomeScreen implements Screen{
 	Label levelsLabel;
 	Label soundLabel;
 	Label musicLabel;
-	private TextButton submit;
+	//private TextButton submit;
+	private ImageTextButton submit;
 	private int level=-1;
 	private boolean isSoundOn=true;
 	private boolean isMusicOn=true;
@@ -62,7 +69,7 @@ public class HomeScreen implements Screen{
 		view = new FitViewport(Launcher.width,Launcher.height, new OrthographicCamera());
 		stage = new Stage(view,game.batch);
 		Gdx.input.setInputProcessor(stage);
-		Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(),Color.WHITE);
+		Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(),Color.RED);
 		//Skin skin = new Skin(Gdx.files.internal("uiskin.json")); 
 		
 		gameIntro= new Label("Welcome magician, make your choices and let's enter into the magic world ! ! !",font);
@@ -81,7 +88,12 @@ public class HomeScreen implements Screen{
 		style.fontColor=Color.ORANGE;
 		style.overFontColor=Color.WHITE;
 		
-		submit= new TextButton("Lets goo",style);
+		Drawable magicIcon = new TextureRegionDrawable(new TextureRegion(new Texture("magic.png")));
+		ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButtonStyle(magicIcon,null,null,new BitmapFont());
+		submit = new ImageTextButton("                  Start",buttonStyle);
+		submit.setWidth(60);
+		submit.setHeight(60);
+		//submit= new TextButton("Lets goo",style);
 		level1.setChecked(true);
 		soundOnBox.setChecked(true);
 		musicOnBox.setChecked(true);
@@ -89,6 +101,7 @@ public class HomeScreen implements Screen{
 		this.handleListiners();
 		this.makeButtonsMutuallyExclusive();
 		layoutOfElements();
+		
 		
 		
 		
@@ -133,7 +146,7 @@ public class HomeScreen implements Screen{
 		table.add(musicOnBox);
 		table.add(musicOffBox);
 		table.row();
-		table.add(submit);
+		table.add(submit).width(60).height(60);
 		
 		stage.addActor(table);
 	}
@@ -284,7 +297,6 @@ public class HomeScreen implements Screen{
 	@Override
 	public void render(float delta) {
 		if (this.allFieldsCompleted) {
-			System.out.println("you are all set"+this.level+this.isMusicOn+this.isSoundOn);
 			game.findLobby(level-1, isSoundOn, isMusicOn);
 			dispose();
 			
@@ -293,7 +305,11 @@ public class HomeScreen implements Screen{
 		
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		game.batch.begin();
+		game.batch.draw(new Texture("magicalBackground.png"),0,0);
+		game.batch.end();
 		stage.draw();
+		
 		
 	}
 

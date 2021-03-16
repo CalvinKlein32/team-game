@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-
+import Obstacle.ApplePowerUp;
 import Obstacle.Door;
 import Obstacle.Dragon;
 import Obstacle.Enemy;
@@ -80,6 +80,23 @@ public class WorldContactListener implements ContactListener{
 		
 		//When one of the fixture is side (either left or right) of a player we identify which one is it, and based on what the other object
 		//the player has run into we perform an action.
+		}else if (fixA.getUserData()=="head" || fixB.getUserData()=="head") {
+			Fixture head;
+			Fixture obstacle;
+			if (fixA.getUserData()=="head") {
+				head= fixA;
+				obstacle = fixB;
+			}else {
+				head=fixB;
+				obstacle=fixA;
+			}
+			if (player.b2body.getFixtureList().contains(head, true)) {
+				if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof ApplePowerUp)) {
+					((ApplePowerUp) obstacle.getUserData()).destroyDoorCells();
+					player.setHasPowerUp(true);
+				}
+			}
+			
 		}else if (fixA.getUserData()=="side" || fixB.getUserData()=="side") {
 			Fixture side;
 			Fixture obstacle;
@@ -113,6 +130,9 @@ public class WorldContactListener implements ContactListener{
 				//If the Object the player has ran into an Enemy object we destroy the player.
 				}else if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof Enemy)) {
 					player.destroyPlayer();
+				}else if (obstacle.getUserData()!=null && (obstacle.getUserData() instanceof ApplePowerUp)) {
+					((ApplePowerUp) obstacle.getUserData()).destroyDoorCells();
+					player.setHasPowerUp(true);
 				}
 				
 			}
