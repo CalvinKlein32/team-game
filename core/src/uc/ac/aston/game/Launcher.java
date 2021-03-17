@@ -241,8 +241,8 @@ public class Launcher extends Game {
 	 */
 	public void connectSocket() {
 		try{
-			//socket =IO.socket("http://localhost:8080");
-			socket =IO.socket("https://arcane-taiga-94757.herokuapp.com/");
+			socket =IO.socket("http://localhost:8080");
+			//socket =IO.socket("https://arcane-taiga-94757.herokuapp.com/");
 			socket.connect();
 		}catch(Exception e) {
 			System.out.println(e);

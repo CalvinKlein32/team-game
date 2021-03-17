@@ -58,10 +58,12 @@ public class HomeScreen implements Screen{
 	Label musicLabel;
 	//private TextButton submit;
 	private ImageTextButton submit;
+	private ImageTextButton info;
 	private int level=-1;
 	private boolean isSoundOn=true;
 	private boolean isMusicOn=true;
 	private boolean allFieldsCompleted=false;
+	private boolean infoClicked=false;
 	
 	
 	public HomeScreen(Launcher game) {
@@ -94,6 +96,12 @@ public class HomeScreen implements Screen{
 		submit.setWidth(60);
 		submit.setHeight(60);
 		//submit= new TextButton("Lets goo",style);
+		Drawable infoIcon = new TextureRegionDrawable(new TextureRegion(new Texture("infoIcon.png")));
+		ImageTextButton.ImageTextButtonStyle buttonStyle2 = new ImageTextButtonStyle(infoIcon,null,null,new BitmapFont());
+		info = new ImageTextButton("                                How to play",buttonStyle2);
+		submit.setWidth(40);
+		submit.setHeight(40); 
+		//info = new TextButton("How to Play", style);
 		level1.setChecked(true);
 		soundOnBox.setChecked(true);
 		musicOnBox.setChecked(true);
@@ -146,7 +154,10 @@ public class HomeScreen implements Screen{
 		table.add(musicOnBox);
 		table.add(musicOffBox);
 		table.row();
+		table.add(info).width(40).height(40);
+		table.row();
 		table.add(submit).width(60).height(60);
+		
 		
 		stage.addActor(table);
 	}
@@ -285,6 +296,13 @@ public class HomeScreen implements Screen{
 				allFieldsCompleted=true;
 			}
 		});
+		info.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				infoClicked=true;
+				   game.setScreen(new InfoScreen(game,null));
+			}
+		});
 	}
 	
 	
@@ -299,6 +317,13 @@ public class HomeScreen implements Screen{
 		if (this.allFieldsCompleted) {
 			game.findLobby(level-1, isSoundOn, isMusicOn);
 			dispose();
+			
+			
+		}
+		
+		if (infoClicked) {
+			infoClicked=false;
+			game.setScreen(new InfoScreen(game,this));
 			
 		}
 		
