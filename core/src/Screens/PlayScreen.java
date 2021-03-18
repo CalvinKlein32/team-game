@@ -322,6 +322,8 @@ public class PlayScreen implements Screen{
 					if (this.currentStatus!=gameStatus.CONCLUDING) {
 						currentStatus=gameStatus.CONCLUDING;
 						endingResult=1;
+					}else {
+						endingResult=2;
 					}
 					theGame.updateHasPlayerFinished();
 				}
@@ -351,6 +353,7 @@ public class PlayScreen implements Screen{
 	
 	public void returnToPlayScreen() {
 		detectCollision.resetGenerateQuestion();
+		status.enableListeners();
 	}
 	
 

@@ -27,39 +27,39 @@ What does 3 squared equal?
 9
 
 Calculate the following: 1/3 + 1/3.
-2/3 
-2/6 
+2/3
+2/6
 1/9
 1/6
 2/3
 
 Which decimal is equivalent to 78.5%?
-0.785 
-78.5 
+0.785
+78.5
 7.85
 785.0
 0.785
 
 In the number 5.054, what is the value of the 4?
-4 ones  
+4 ones
 4 hundredths 
 4 thousandths
 4 million
 4 thousandths
 
 What is the number in the tenths position in 658.507? 
-5 
-0  
+5
+0
 7
 8
 5
 
 What is the value of the number 9 in 5.896? 
-9 thousandths  
-9 hundredths 
+9 thousandths
+9 hundredths
 9 ones
 none of the above
-9 hundredths  
+9 hundredths
 
 What is 707 + 1818?
 2525
@@ -69,71 +69,71 @@ What is 707 + 1818?
 2525
 
 Calculate the following; 27/22 - 1/11 :
-26/11  
-25/22 
+26/11
+25/22
 25/11
 24/22
 25/22
 
 Which of the following, results in the largest answer: 0.1 * 0.2,  1 * 0.2, 2.1 * 1.2 or  1.1 * 2.1 :
-2.1 * 1.2  
-1.1 * 2.1  
+2.1 * 1.2
+1.1 * 2.1
 0.1 * 0.2
 they are the same
 2.1 * 1.2
 
 Solve for the following: (2 * 7) + 1 * 3 :
-45 
-21 
+45
+21
 17
 16
-17 
+17
 
 Write the following expressions in their simplest form:  a + 2a + 3a :
 6 
-6a 
+6a
 6*a
 6^a
-6a 
+6a
 
 Which number is the smallest, 1.101, 0.11, 1.10, 0.01 :
-1.101 
-0.11 
+1.101
+0.11
 0.01
 0.1
 0.01
 
 Round 355 to the nearest hundred. 
-400  
-300  
+400
+300
 360
 350
 400
 
 Write the expression in it’s simplest form, 3b + 4b + 5b + 3b.
 15b
-15b * 4 
+15b * 4
 60b
 15^b
 15b
 
 Write the following number with numerals: eight hundred and, four hundredths and one thousandths.
-800.401  
-800.041 
+800.401
+800.041
 8.00401
 800401
-800.401 
+800.401
 
 Expand the following: 2(e − 8).
-16e  
-2e -8  
-2e - 16 
+16e
+2e -8
+2e - 16
 -16e
-2e - 16 
+2e - 16
 
 Factorise the following expressions:  7x + 21:
-7(x + 3) 
-28x 
+7(x + 3)
+28x
 7(x + 21)
 7(x - 3)
 7(x + 3)

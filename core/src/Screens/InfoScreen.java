@@ -66,7 +66,7 @@ public class InfoScreen implements Screen {
 		Table Title = new Table();
 		Title.setFillParent(true);
 		
-		Title.add(Menu).padTop(400);
+		Title.add(Menu).padTop(450);
 		Title.row();
 		stage.addActor(Title);
 	}

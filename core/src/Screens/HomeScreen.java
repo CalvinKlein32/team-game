@@ -71,7 +71,7 @@ public class HomeScreen implements Screen{
 		view = new FitViewport(Launcher.width,Launcher.height, new OrthographicCamera());
 		stage = new Stage(view,game.batch);
 		Gdx.input.setInputProcessor(stage);
-		Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(),Color.RED);
+		Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(),Color.GOLD);
 		//Skin skin = new Skin(Gdx.files.internal("uiskin.json")); 
 		
 		gameIntro= new Label("Welcome magician, make your choices and let's enter into the magic world ! ! !",font);

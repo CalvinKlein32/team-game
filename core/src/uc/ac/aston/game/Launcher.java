@@ -161,8 +161,10 @@ public class Launcher extends Game {
 		int score=0;
 		if (position==1) {
 			score=screen.getCurrentSore()+100;
-		}else {
+		}else if (position==2) {
 			score=screen.getCurrentSore()+50;
+		}else{
+			score=screen.getCurrentSore();
 		}
 		System.out.print(currentLevel);
 		if (currentLevel<6) {
@@ -170,7 +172,7 @@ public class Launcher extends Game {
 			setScreen(screen);
 			screen.createPlayer2();
 			screen.allowMovement();
-			System.out.println("Congratulations you finished the level in position: "+position);
+			//System.out.println("Congratulations you finished the level in position: "+position);
 		}else {
 			finalPoints=score;
 			JSONObject data = new JSONObject();
@@ -241,8 +243,8 @@ public class Launcher extends Game {
 	 */
 	public void connectSocket() {
 		try{
-			socket =IO.socket("http://localhost:8080");
-			//socket =IO.socket("https://arcane-taiga-94757.herokuapp.com/");
+			//socket =IO.socket("http://localhost:8080");
+			socket =IO.socket("https://arcane-taiga-94757.herokuapp.com/");
 			socket.connect();
 		}catch(Exception e) {
 			System.out.println(e);
@@ -360,7 +362,7 @@ public class Launcher extends Game {
 						//newGame();
 						lobbyNum = -1;
 						numPlayer= -1;
-						System.out.print("coming from "+lobbyTocheck+" Player going to "+lobbyNum+" to become player number "+numPlayer);
+						//System.out.print("coming from "+lobbyTocheck+" Player going to "+lobbyNum+" to become player number "+numPlayer);
 						screen.changeToDisconnecting();
 /*						if (count==2){
 							data.put("lobbyNum", lobbyNum);
@@ -420,7 +422,7 @@ public class Launcher extends Game {
 						}else {
 							currentLevel++;
 							screen.changeToConcluidng();
-							screen.setEndingresult(2);
+							//screen.setEndingresult(2);
 						}	
 						
 					}		

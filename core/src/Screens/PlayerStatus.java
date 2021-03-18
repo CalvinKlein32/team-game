@@ -133,6 +133,10 @@ public class PlayerStatus implements Disposable{
 			this.statusLabel.setText(theStatus);
 		}
 	}
+	
+	public void enableListeners() {
+		Gdx.input.setInputProcessor(stage);
+	}
 
 	@Override
 	public void dispose() {
