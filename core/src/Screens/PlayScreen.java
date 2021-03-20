@@ -252,7 +252,7 @@ public class PlayScreen implements Screen{
 					Launcher.manager.get("music/Jump.wav", Music.class).play();
 				}
 				if (player.getHasPowerUp()) {
-					player.b2body.applyLinearImpulse(new Vector2(0,8f), player.b2body.getWorldCenter(),true);
+					player.b2body.applyLinearImpulse(new Vector2(0,6f), player.b2body.getWorldCenter(),true);
 				}else {
 					player.b2body.applyLinearImpulse(new Vector2(0,4f), player.b2body.getWorldCenter(),true);
 				}

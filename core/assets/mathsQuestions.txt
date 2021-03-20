@@ -124,7 +124,7 @@ Write the following number with numerals: eight hundred and, four hundredths and
 800401
 800.401
 
-Expand the following: 2(e − 8).
+Expand the following: 2(e - 8).
 16e
 2e -8
 2e - 16

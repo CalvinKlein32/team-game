@@ -160,7 +160,7 @@
   <object id="201" x="1019" y="292.5" width="106" height="57"/>
   <object id="203" x="1204.67" y="350.5" width="375.333" height="131"/>
   <object id="208" x="2225" y="275.5" width="318" height="205"/>
-  <object id="209" x="2118" y="283.5" width="51" height="50"/>
+  <object id="209" x="2118" y="283.5" width="54.573" height="52.6798"/>
   <object id="210" x="1651" y="416.5" width="238" height="64"/>
   <object id="215" x="2704" y="319.5" width="303" height="161"/>
   <object id="216" x="3121" y="318.5" width="876" height="162"/>
@@ -177,7 +177,7 @@
  </objectgroup>
  <objectgroup id="8" name="Spikes">
   <object id="193" x="1456" y="334" width="33" height="16.6667"/>
-  <object id="195" x="1312.83" y="324.5" width="24.6667" height="24.6667"/>
+  <object id="195" x="1312.83" y="330.306" width="24.6667" height="18.8605"/>
   <object id="212" x="1777.01" y="396.626" width="22.6667" height="19.3072"/>
   <object id="223" x="3358" y="302.646" width="22" height="15.854"/>
   <object id="224" x="3505.59" y="299.5" width="24.4073" height="17"/>
@@ -197,7 +197,7 @@
   <object id="238" x="1203.33" y="198" width="1.33333" height="148"/>
   <object id="239" x="1572.67" y="198" width="1.33333" height="148.667"/>
   <object id="241" x="2598.33" y="259.667" width="56.6667"/>
-  <object id="242" x="2593.33" y="108.333" width="59.3333" height="1.33333"/>
+  <object id="242" x="2590.65" y="63.6702" width="59.3333" height="1.33333"/>
   <object id="244" x="964" y="223.334" width="52" height="1.33333"/>
   <object id="245" x="958" y="350.667" width="47.3333"/>
  </objectgroup>
@@ -209,6 +209,6 @@
   <object id="246" x="967.334" y="286.667" width="32.6667" height="33.3333"/>
  </objectgroup>
  <objectgroup id="18" name="Fruit">
-  <object id="252" x="595.854" y="209.301" width="43.8455" height="45.2724"/>
+  <object id="252" x="598.98" y="216" width="38.0393" height="38.573"/>
  </objectgroup>
 </map>
