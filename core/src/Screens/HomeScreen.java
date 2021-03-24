@@ -65,6 +65,8 @@ public class HomeScreen implements Screen{
 	private boolean allFieldsCompleted=false;
 	private boolean infoClicked=false;
 	
+	Texture level1BG,level2BG,level3BG,level4BG,level5BG,level6BG;
+	boolean level1Checked, level2Checked, level3Checked, level4Checked, level5Checked, level6Checked;
 	
 	public HomeScreen(Launcher game) {
 		this.game=game;
@@ -130,7 +132,7 @@ public class HomeScreen implements Screen{
 		Table table = new Table();
 		table.setFillParent(true);
 		
-		table.add(gameIntro).center().width(500);
+		//table.add(gameIntro).center().width(500);
 		table.row().padTop(50);
 		table.add(levelsLabel).padRight(120);
 		table.row();
@@ -186,6 +188,8 @@ public class HomeScreen implements Screen{
 				// TODO Auto-generated method stub
 				if (level1.isChecked()) {
 					level=1;
+					resetChecked();
+					level1Checked = true;
 				}
 				Gdx.graphics.setContinuousRendering(level1.isChecked());
 			}
@@ -198,6 +202,8 @@ public class HomeScreen implements Screen{
 				Gdx.graphics.setContinuousRendering(level2.isChecked());
 				if (level2.isChecked()) {
 					level=2;
+					resetChecked();
+					level2Checked =true;
 				}
 			}
 		});
@@ -209,6 +215,8 @@ public class HomeScreen implements Screen{
 				Gdx.graphics.setContinuousRendering(level3.isChecked());
 				if (level3.isChecked()) {
 					level=3;
+					resetChecked();
+					level3Checked = true;
 				}
 			}
 		});
@@ -220,6 +228,8 @@ public class HomeScreen implements Screen{
 				Gdx.graphics.setContinuousRendering(level4.isChecked());
 				if (level4.isChecked()) {
 					level=4;
+					resetChecked();
+					level4Checked = true;
 				}
 			}
 		});
@@ -231,6 +241,8 @@ public class HomeScreen implements Screen{
 				Gdx.graphics.setContinuousRendering(level5.isChecked());
 				if (level5.isChecked()) {
 					level=5;
+					resetChecked();
+					level5Checked = true;
 				}
 			}
 		});
@@ -242,6 +254,8 @@ public class HomeScreen implements Screen{
 				Gdx.graphics.setContinuousRendering(level6.isChecked());
 				if (level6.isChecked()) {
 					level=6;
+					resetChecked();
+					level6Checked = true;
 				}
 			}
 		});
@@ -305,10 +319,23 @@ public class HomeScreen implements Screen{
 		});
 	}
 	
+	public void resetChecked() {
+		level1Checked = false;
+		level2Checked = false;
+		level3Checked = false;
+		level4Checked = false;
+		level5Checked = false;
+		level6Checked = false;
+	}
 	
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		level1BG = new Texture(Gdx.files.internal("level1.png"));
+		level2BG = new Texture(Gdx.files.internal("level2.png"));
+		level3BG = new Texture(Gdx.files.internal("level3.png"));
+		level4BG = new Texture(Gdx.files.internal("level4.png"));
+		level5BG = new Texture(Gdx.files.internal("level5.png"));
+		level6BG = new Texture(Gdx.files.internal("level6.png"));
 		
 	}
 
@@ -324,19 +351,37 @@ public class HomeScreen implements Screen{
 		if (infoClicked) {
 			infoClicked=false;
 			game.setScreen(new InfoScreen(game,this));
-			
+		
 		}
 		
 		
-		Gdx.gl.glClearColor(0,0,0,1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.batch.begin();
-		game.batch.draw(new Texture("magicalBackground.png"),0,0);
+		if(level1Checked) {
+			game.batch.draw(level1BG,0,0);
+		} 
+		if(level2Checked) {
+			game.batch.draw(level2BG,0,0);
+		}
+		if(level3Checked) {
+			game.batch.draw(level3BG,0,0);
+		}
+		if (level4Checked) {
+			game.batch.draw(level4BG,0,0);
+		}
+		if (level5Checked) {
+			game.batch.draw(level5BG,0,0);
+		}
+		if (level6Checked) {
+			game.batch.draw(level6BG,0,0);
+		}
 		game.batch.end();
+		
+		
 		stage.draw();
 		
 		
 	}
+
 
 	@Override
 	public void resize(int width, int height) {
