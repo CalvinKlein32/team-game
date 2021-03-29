@@ -362,7 +362,7 @@ public class PlayScreen implements Screen{
 	}
 	
 	public void dragPlayerBack() {
-		Vector2 playerPosition = new Vector2(player.b2body.getWorldCenter().x -0.4f,player.b2body.getWorldCenter().y);
+		Vector2 playerPosition = new Vector2(player.b2body.getWorldCenter().x -0.2f,player.b2body.getWorldCenter().y);
 		player.b2body.setTransform(playerPosition, 0);
 	}
 	
