@@ -7,7 +7,8 @@ import uc.ac.aston.game.Launcher;
  * 
  * @author Los Thunder Team
  * 
- * The class is responsible for the window configurations on which the  game will be run. 
+ * DesktopLauncher class is responsible for setting up the window configurations on which the game will be run including title, dimensions, and runs 
+ * the application in the Launcher class with the specified configurations. 
  *
  */
 public class DesktopLauncher {

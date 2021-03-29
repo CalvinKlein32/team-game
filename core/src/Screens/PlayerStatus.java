@@ -65,7 +65,6 @@ public class PlayerStatus implements Disposable{
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Launcher.isMusicOn=!Launcher.isMusicOn;
-				//Launcher.setMusicOn();
 			}
 		});
 		Drawable drawable2 = new TextureRegionDrawable(new TextureRegion(new Texture("soundOn.png")));
@@ -76,7 +75,6 @@ public class PlayerStatus implements Disposable{
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Launcher.isSoundOn=!Launcher.isSoundOn;
-				//Launcher.setMusicOn();
 			}
 		});
 		
@@ -87,9 +85,7 @@ public class PlayerStatus implements Disposable{
 		homeButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				System.out.println("ok");
 				Launcher.returnToHome=true;
-				//Launcher.setMusicOn();
 			}
 		});
 		

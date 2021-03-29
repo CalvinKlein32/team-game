@@ -15,8 +15,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 /**
- * Question class Reads a list of multiple choice question from a file and store its data in appropriate collection, a
- * llowing for a random question to be accessed.
+ * Question class Reads a list of multiple choice question from a file and store its data in appropriate collection, 
+ * allowing for a random question to be accessed.
  *
  */
 
@@ -72,23 +72,31 @@ public class Question {
 	
 		}
 	
+
+	
 	/**
+	 * randomQuestionGenerator generates a random question that can be either English or math for user to answer
 	 * 
-	 * @return an Array lList on strings, where index 0 is the question text, index 1 to 4 the 4 possible options and at index 5 the answer.
+	 * @param difficultyLevel integer indicating the difficulty the question should be 1 easy, 2 intermediate , 3 hard.
+	 * @return an Array lList on strings, where index 0 is the question text, index 1 to 4 contain the 4 possible options and at index 5 the answer.
 	 */
 		
 	public ArrayList<String> randomQuestionGenerator(int difficultyLevel) {
 		///ramdom number generator
 		Random r = new Random();
 		
+		//randomSubject stores an integer that represents a random subject between English and math where 0 is math and 1 is English
 		int randomSubject = r.nextInt(2);
+		//randomQuestion stores an integer representing an index of the starting point for the details of the question 
+		//it first store an index for an easy question
 		int randomQuestion = new Random().nextInt(this.numberOfQuestions/3)*this.linesperQuestion;
 		
 		
 		if (difficultyLevel==2) {
+			//randomQuestion index is incremented to point to the starting point of an intermediate question 
 			randomQuestion+=(numberOfQuestions/3)*linesperQuestion;
-			System.out.println("yessir");
 		}else if (difficultyLevel==3) {
+			//randomQuestion index is incremented to point to the starting point of an hard question 
 			randomQuestion+= (2*numberOfQuestions/3)*linesperQuestion;
 		}
 		
@@ -97,13 +105,14 @@ public class Question {
 		ArrayList<String> tempQuestion = new ArrayList<String>();
 		
 	
-		//if the random number generator is below half the amount of lines of all questions combined, the question chose would be a math
-		//question otherwise it would be an English question
+		
 		if (randomSubject==1){
+			//all the details of the questions are stored in 6 lines, so each line is added as elements to the tempQuestion list.
 			for (int questionLine = randomQuestion; questionLine < randomQuestion +6; questionLine++) {
 				tempQuestion.add(mathsQuestions.get(questionLine));
 			}
 		}else {
+			//all the details of the questions are stored in 6 lines, so each line is added as elements to the tempQuestion list.
 			for (int questionLine = randomQuestion; questionLine < randomQuestion +6; questionLine++) {
 				tempQuestion.add(englishQuestions.get(questionLine));
 			}

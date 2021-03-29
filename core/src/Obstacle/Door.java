@@ -62,7 +62,7 @@ public class Door {
 	}
 	
 	/**
-	 * Destroys the physical cells that make uo the door by taking away the tiles of the door from the TiledMap.
+	 * Destroys the physical cells that make up the door by taking away the tiles of the door from the TiledMap.
 	 */
 	public void destroyDoorCells(){
 		setCategoryFilter(Launcher.destroyedBit);
@@ -73,8 +73,6 @@ public class Door {
 		
 		for (int j=0;j<= Math.round(bounds.getHeight())/16;j++) {
 			for (int i=0; i<Math.round(bounds.getWidth()/16);i++) {
-				//System.out.println((dx+i)+"and "+(dy-j));
-				
 				if (layer.getCell(dx+i, dy+j)!=null){
 					layer.getCell(dx+i, dy+j).setTile(null);
 				}

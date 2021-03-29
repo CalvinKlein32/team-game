@@ -41,7 +41,6 @@ import uc.ac.aston.game.Launcher;
 
 /**
  *
- * @author Los Thunder
  *The PlayScreen class is a class that contains the screen that displays all the component of a level including the map, the players, objects for
  *that level.
  *
@@ -96,17 +95,17 @@ public class PlayScreen implements Screen{
 	private enum gameStatus{WAITING,STARTING,PROGRESSING,FROZEN,ADVANCING,CONCLUDING,DISCONNECTING,POWER_ACTIVATED};
 	//currentStaus is the game current State.
 	private gameStatus currentStatus;
-	
+	//countdownForStart is the initial count down for when the players can start playing the level associated with this screen
 	private int countdownForStart = 5;
-	
+	//timeCount is the current time on the game world.
 	private float timeCount=0;
-	
+	//endingResult is the boolean indicating the position in which the player has finished the level
 	private int endingResult=-1;
-	
+	//concludingCountdown integer indicating a timer to allows the opposing player to finish after the main player has completed the level
 	private int concludingCountdown = 20;
-	
+	//music is a Music variable representing the sound track of the game.
 	private Music music;
-	
+	//isLeavingLevel boolean indicating whether the player has decided to leave the level associate with this screen.
 	private boolean isLeavingLevel=false;
 	
 	
@@ -135,7 +134,6 @@ public class PlayScreen implements Screen{
 		world.setContactListener(detectCollision);
 		listOfQuestions= new Question();
 		currentStatus = gameStatus.WAITING;
-		
 		music=Launcher.manager.get("music/Background.wav", Music.class);
 		
 		
@@ -152,10 +150,11 @@ public class PlayScreen implements Screen{
 
 	/**
 	 * the render method handle what is seen during the run time of the screen including rendering the map, update scene, rendering the status details
-	 * changing to another screen 
+	 * changing to another screen, playing music
 	 */
 	@Override
 	public void render(float delta) {
+		//plays music sound track if the user desires for the music to be on.
 		if (theGame.isMusicOn) {
 			music.setLooping(true);
 			music.setVolume(0.1f);
@@ -171,14 +170,15 @@ public class PlayScreen implements Screen{
 			this.isLeavingLevel=true;
 		}
 		
-		//Check whether a player is dead, if it is it revives it to the initial position
+		//Check whether a player is dead, if is, revives player to the initial position
 		if (player.getTimer()==0) {
 			player.revivePlayer();
 			player.b2body.setTransform(new Vector2(1,3),0);
 		}
 		update(delta);
 		updateStatus(delta);
-		//set background enviroment
+		
+		//set background environment
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
@@ -217,6 +217,9 @@ public class PlayScreen implements Screen{
 		player.setCanOpenDoor(true);
 	}
 	
+	/**
+	 * Blocks players movement 
+	 */
 	public void playerFrozen() {
 		currentStatus=gameStatus.FROZEN;
 		canMove=false;
@@ -248,9 +251,11 @@ public class PlayScreen implements Screen{
 		if (!player.getIsDead() && canMove) {
 			//if up key has been pressed and player was not already jumping apply a liner impulse to the main player in y direction
 			if (Gdx.input.isKeyPressed(Input.Keys.UP) && player.b2body.getLinearVelocity().y==0) {
+				//apply sound effect for the jump if the user desires
 				if (Launcher.isSoundOn) {
 					Launcher.manager.get("music/Jump.wav", Music.class).play();
 				}
+				//if player has power up the displacement of the jump in the y direction is set to be higher than normal.
 				if (player.getHasPowerUp()) {
 					player.b2body.applyLinearImpulse(new Vector2(0,6f), player.b2body.getWorldCenter(),true);
 				}else {
@@ -286,9 +291,12 @@ public class PlayScreen implements Screen{
 			theGame.updateServer(delta);
 		}
 		
-		if (this.currentStatus!=gameStatus.POWER_ACTIVATED & player.getHasPowerUp()) {
-			this.currentStatus=gameStatus.POWER_ACTIVATED;
+		if (currentStatus!=gameStatus.CONCLUDING) {
+			if (this.currentStatus!=gameStatus.POWER_ACTIVATED & player.getHasPowerUp()) {
+				this.currentStatus=gameStatus.POWER_ACTIVATED;
+			}
 		}
+		
 		
 		if (player2!=null) {
 			player2.b2body.setTransform(player2Position, 0);
@@ -312,7 +320,7 @@ public class PlayScreen implements Screen{
 			player.decrementRespawnTimer();
 		}
 		
-		//check if the player is waiting to move level or has received signal to move level and informs Launcher class.
+		//check if the player is waiting to move level or has received signal to move level and informs Launcher class, also updates ending position.
 		if (!waitingToMoveLevel) {
 			if (player.getHasFinishedLevel()) {
 				
@@ -329,18 +337,15 @@ public class PlayScreen implements Screen{
 				}
 			}
 		}else if (signalToMoveLevelReceived) {
-			//signalToMoveLevelReceived=false;
 			if (this.currentStatus!=gameStatus.DISCONNECTING){
 				if (this.currentStatus!=gameStatus.ADVANCING) {
 					currentStatus=gameStatus.ADVANCING;
 				}
 			}	
-			//endingResult=1;
-			//theGame.nextLevel(1);
 			
 		}
 		
-		//show game over screen when game has reached the end
+		//show game over screen when game has reached the end and it is the last level.
 		if (hasGameEnded & currentLevel==5) {
 			theGame.showGameOverScreen();
 		}
@@ -354,6 +359,11 @@ public class PlayScreen implements Screen{
 	public void returnToPlayScreen() {
 		detectCollision.resetGenerateQuestion();
 		status.enableListeners();
+	}
+	
+	public void dragPlayerBack() {
+		Vector2 playerPosition = new Vector2(player.b2body.getWorldCenter().x -0.4f,player.b2body.getWorldCenter().y);
+		player.b2body.setTransform(playerPosition, 0);
 	}
 	
 
@@ -401,19 +411,25 @@ public class PlayScreen implements Screen{
 		currentStatus=gameStatus.DISCONNECTING;
 	}
 	
-	
+	/**
+	 * updateStatus performs a specific operation based on the status of the game in the level associated with this screen
+	 * @param delta integer indicating update time in the game world
+	 */
 	public void updateStatus(float delta) {
 		String state;
 		switch(currentStatus) {
 		case DISCONNECTING:
 			timeCount+=delta;
+			//checks for when 1 second has passed in the game world
 			if (timeCount>=1) {
+				//if the count down reaches 0 it changes the state to waiting and returns back to the home screen 
 				if (this.countdownForStart==0) {
 					state="Here we goo";
 					countdownForStart=5;
 					currentStatus = gameStatus.WAITING;
 					theGame.newGame();
 				}else {
+					//keep decreasing the count down showing an appropriate message on the status bar based on who initiated the disconnection
 					canMove=false;
 					if (isLeavingLevel) {
 						state="Returning to Home page in: "+countdownForStart;
@@ -428,18 +444,22 @@ public class PlayScreen implements Screen{
 			}
 			break;
 		case WAITING:
+			//shows a message on the status bar notifying the player that the game is waiting for opponent player.
 			state="waiting for opponent player to connect ...";
 			status.update(state);
 			break;
 		case STARTING:
 			timeCount+=delta;
+			//checks for when 1 second has passed in the game world
 			if (timeCount>=1) {
+				//if the count down reaches 0 it changes the state to progressing allowing the player to move.
 				if (this.countdownForStart==0) {
 					state="Gooooooooooo";
 					currentStatus = gameStatus.PROGRESSING;
 					countdownForStart=5;
 					canMove=true;
 				}else {
+					//decreases count down shows a message on the status bar notifying the players when they can start playing the level.
 					state="Level starts in: "+countdownForStart;
 					countdownForStart--;
 					
@@ -450,13 +470,16 @@ public class PlayScreen implements Screen{
 			break;
 		case FROZEN:
 			timeCount+=delta;
+			//checks for when 1 second has passed in the game world
 			if (timeCount>=1) {
+				//if the count down reaches 0 it changes the state to progressing allowing the main player to move.
 				if (this.countdownForStart==0) {
 					state="Gooooooooooo";
 					currentStatus = gameStatus.PROGRESSING;
 					countdownForStart=5;
 					canMove=true;
 				}else {
+					//decreases count down shows a message on the status bar notifying the players when they would be allowed to move after being frozen.
 					state="You have been freezed, you will be allowed to move again in: "+countdownForStart;
 					countdownForStart--;
 					
@@ -467,13 +490,16 @@ public class PlayScreen implements Screen{
 			break;
 		case POWER_ACTIVATED:
 			timeCount+=delta;
+			//checks for when 1 second has passed in the game world
 			if (timeCount>=1) {
 				if (this.countdownForStart==0) {
+					//if the count down reaches 0 it changes the state to progressing and changes the boolean variable hasPowerUp to false.
 					state="Gooooooooooo";
 					currentStatus = gameStatus.PROGRESSING;
 					countdownForStart=5;
 					player.setHasPowerUp(false);
 				}else {
+					//decreases count down shows a message on the status bar notifying about the power up and when its effect disappears.					
 					state="You have obtained the super jump power up, effect would be disabled in: "+countdownForStart;
 					countdownForStart--;
 					
@@ -485,12 +511,14 @@ public class PlayScreen implements Screen{
 		case CONCLUDING:
 			timeCount+=delta;
 			if (timeCount>=1) {
+				//if the count down reaches 0 it changes the state to advancing disabling movement.
 				if (this.concludingCountdown==0) {
 					state="End";
 					currentStatus = gameStatus.ADVANCING;
 					countdownForStart=5;
 					canMove=false;
 				}else {
+					//decreases count down shows a message on the status bar notifying appropriate messages based on who arrived at the finish line first.
 					if (this.endingResult==1) {
 						state="Well done you finished first, let's give the opponent "+concludingCountdown+"s to finish off the level";
 					}else {
@@ -505,10 +533,13 @@ public class PlayScreen implements Screen{
 			break;
 		case ADVANCING:
 			timeCount+=delta;
+			//checks for when 1 second has passed in the game world
 			if (timeCount>=1) {
+				//if the count down reaches 0 moves to the next level by calling the nextLevel with the player ending result.
 				if (this.countdownForStart==0) {
 					theGame.nextLevel(endingResult);
 				}else {
+					//decreases count down shows a message on the status bar notifying the timer to move to the next level.
 					state="Well done, moving to the next level in : "+countdownForStart;
 					countdownForStart--;
 					status.update(state);
@@ -520,6 +551,7 @@ public class PlayScreen implements Screen{
 			
 			
 		default:
+			//shows a message on the status bar notifying that the game is in progress.
 			state = "Game in progress";
 			status.update(state);
 		}

@@ -27,22 +27,25 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import uc.ac.aston.game.Launcher;
 
+/**
+ * InfoScreen is a Screen class that displays the instructions for the game.
+ *
+ */
 public class InfoScreen implements Screen {
 	private Viewport view;
 	//stage is the environment that can be viewed.
 	private Stage stage;
 	// variable containing the Launcher class that handles the different screens;
 	private Launcher game;
+	//Menu TextButton is the button to go back to the Menu.
 	private TextButton Menu;
-
-	private HomeScreen home;
-	Texture texture1;
-	SpriteBatch batch;
+	//backgroundTexture is the texture that would be shown at the background of this screen
+	private Texture backgroundTexture;
+	//isMenuClicked is a boolean variable to check whether the Menu button has been clicked.
 	private boolean isMenuClicked = false;
 	
 	public InfoScreen(Launcher game, HomeScreen home) {
 		this.game = game;
-		this.home = home;
 		view = new FitViewport(Launcher.width,Launcher.height, new OrthographicCamera());
 		stage = new Stage(view,game.batch);
 		Gdx.input.setInputProcessor(stage);
@@ -55,14 +58,16 @@ public class InfoScreen implements Screen {
 		style.fontColor=Color.RED;
 		
 		Menu = new TextButton("Back to Home Page!", style);
-		//Menu.setWidth(500);
 		
-		Buttons();
+		layoutofElemnts();
 		handleListiners();
 
 	}
 	
-	public void Buttons() {
+	/** 
+	 * Defines the structure of the screen through a table layout where each element is in particular row of the table.
+	 */
+	public void layoutofElemnts() {
 		Table Title = new Table();
 		Title.setFillParent(true);
 		
@@ -71,6 +76,9 @@ public class InfoScreen implements Screen {
 		stage.addActor(Title);
 	}
 	
+	/**
+	 * handleListiners is a method that based on the action performed on a particular button it would change its state
+	 */
 	public void handleListiners() {
 		Menu.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
@@ -83,22 +91,21 @@ public class InfoScreen implements Screen {
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		texture1 = new Texture(Gdx.files.internal("info.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("info.png"));
 
 	}
 	 
 	@Override
 	public void render(float delta) {
 		
+		//changes to the homeScreen based on the value of isMenuClicked.
 		if(this.isMenuClicked) {
 			game.setScreen(new HomeScreen(game));
 		}
 		
-		//Gdx.gl.glClearColor(0,0,0,1);
-		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+		//draws background image
 		game.batch.begin();
-		game.batch.draw(texture1,0, 0);
+		game.batch.draw(backgroundTexture,0, 0);
 		game.batch.end();
 		
 		

@@ -3,7 +3,6 @@ package Levels;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -24,14 +23,15 @@ import Screens.PlayScreen;
 import uc.ac.aston.game.Launcher;
 
 /**
- * LevelCreator class reads all the object components from a tile Map and reproduces them in the game world appropriately, so that the 
- * player can interact with it.
+ * LevelCreator class reads all the object components from a tile Map relative to the level of the current PlayScreen
+ * and reproduces them in the game world appropriately, so that the player can interact with it.
  */
 public class LevelCreator {
 	//enemies is a list that would be used to contain enemies(red and blue dragons) obtained from the TiledMap.
 	private Array<Enemy> enemies=new Array<Enemy>();;
 	
 	public LevelCreator(TiledMap map, World world, PlayScreen screen) {
+		
 		BodyDef bdef = new BodyDef();
 		PolygonShape actor = new PolygonShape();
 		FixtureDef f = new  FixtureDef();
@@ -43,7 +43,7 @@ public class LevelCreator {
 			new FinishLine(world,map,rect);
 		}
 		
-		//From the tileMap at index 5 there are all the the Ground object we need for that tiledMap, and create a Body object and fixture for it.
+		//From the tileMap at index 5 there are all the the Ground object we need for that tiledMap, and create a Body object and fixture for those.
 		for (MapObject object: map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
 			Rectangle rect = ((RectangleMapObject) object).getRectangle();
 			bdef.type = BodyDef.BodyType.StaticBody;
@@ -110,21 +110,18 @@ public class LevelCreator {
 			enemies.add(new BlueDragon(screen,rect.getX()/Launcher.PPM,rect.getY()/Launcher.PPM));
 		}
 		
+		//From the tileMap at index 13 there are all the the Apple  object we need for that tiledMap, and create a Body object and fixture for it.
 		for (MapObject object: map.getLayers().get(13).getObjects().getByType(RectangleMapObject.class)) {
 			Rectangle rect = ((RectangleMapObject) object).getRectangle();
 			new ApplePowerUp(world,map,rect);
 		}
 		
-		
-		
-		
-
 	}
 	
 	
 	/**
 	 * 
-	 * @return a list of all the enemies objects obtained from the TiledMAp
+	 * @return a list of all the enemies objects obtained from the Tiled map
 	 */
 	public Array<Enemy> getDragons(){
 		return enemies;

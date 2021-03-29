@@ -13,12 +13,18 @@ import com.badlogic.gdx.utils.Array;
 import Screens.PlayScreen;
 import uc.ac.aston.game.Launcher;
 
+/**
+ * 
+ * Dragon class that represents a type of Enemy that is a red dragon that walks horizontally on surface and  must be avoided by the player.
+ *
+ */
+
 public class Dragon extends Enemy{
-	//stateTime is a float that keeps track of the amount of time the player stays in a particular state.
+	//stateTime is a float that keeps track of the amount of time the red dragon stays in a particular state.
 	private float stateTime;
-	//walkingLeft is as an Animation made of a series  textures correlated to when the player is moving left.
+	//walkingLeft is as an Animation made of a series  textures correlated to when the red dragon is moving left.
 	private Animation<TextureRegion> walkingLeft;
-	//walkingRight is as an Animation made of a series  textures correlated to when the player is moving right.
+	//walkingRight is as an Animation made of a series  textures correlated to when the red dragon is moving right.
 	private Animation<TextureRegion> walkingRight;
 	//frames is a list of textures that are involved in the animations.
 	Array<TextureRegion> frames;

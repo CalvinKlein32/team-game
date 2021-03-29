@@ -14,12 +14,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import uc.ac.aston.game.Launcher;
 
 public abstract class InteractiveObstacle {
-	//the body object that would represent the obstacle..
+	//the body object that would represent the obstacle.
 	protected Body body;
 	//Fixture associated with the obstacle.
 	protected Fixture fixture;
 	
 	public InteractiveObstacle(World world,TiledMap map, Rectangle bounds) {
+		//creates the body object for a particular obstacle.
 		BodyDef bdef = new BodyDef();
 		PolygonShape actor = new PolygonShape();
 		FixtureDef f = new  FixtureDef();
@@ -44,6 +45,9 @@ public abstract class InteractiveObstacle {
 		
 	}
 	
+	/**
+	 * Allows to perform a sound effect when obstacle is hit.
+	 */
 	public abstract void collisionSound();
 
 }

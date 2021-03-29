@@ -25,7 +25,7 @@ import uc.ac.aston.game.Launcher;
 
 /**
  * 
- * This class is a Screen that displays a Question, allowing player to select an Answer from the given option by clicking to the right
+ * This class is a Screen that displays a Question, allowing player to select an answer from the given option by clicking to the right
  * button. Waits for user interaction before going back to the main playing screen notifying whether player has answered correctly or not.
  *
  */
@@ -160,17 +160,20 @@ public class QuestionScreen implements Screen{
 	public void render(float delta) {
 		if (Gdx.input.isKeyPressed(Input.Keys.Q)|(hasButtonBeenPressed)){
 			if (isAnswerCorrect) {
+				//plays sound effect for correct answer
 				if (Launcher.isSoundOn) {
 					Launcher.manager.get("music/CorrectAnswer.wav", Music.class).play();
 				}
 				playScreen.unlockDoor();
 			}else {
+				//restricts players movement and plays sound effect for correct answer
 				playScreen.playerFrozen();
 				if (Launcher.isSoundOn) {
 					Launcher.manager.get("music/WrongAnswer.wav", Music.class).play();
 				}
 			}
 			dispose();
+			playScreen.dragPlayerBack();
 			playScreen.returnToPlayScreen();
 			game.setScreen(playScreen);
 			

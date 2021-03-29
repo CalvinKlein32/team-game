@@ -43,6 +43,7 @@ public class HomeScreen implements Screen{
 	private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 	
 	private final CheckBox level1= new CheckBox("Level 1",skin);
+	//the following are a series of CheckBox variable used in the UI design for the user to make a particular selection based on their preference.
 	final CheckBox level2= new CheckBox("Level 2",skin);
 	final CheckBox level3= new CheckBox("Level 3",skin);
 	final CheckBox level4= new CheckBox("Level 4",skin);
@@ -52,21 +53,28 @@ public class HomeScreen implements Screen{
 	final CheckBox soundOffBox= new CheckBox("off",skin);
 	final CheckBox musicOnBox= new CheckBox("on",skin);
 	final CheckBox musicOffBox= new CheckBox("off",skin);
-	Label gameIntro;
-	Label levelsLabel;
-	Label soundLabel;
-	Label musicLabel;
-	//private TextButton submit;
+	//The following are a list of labels to display a particular message to the used, to make them understand a choice they must make.
+	private Label levelsLabel;
+	private Label soundLabel;
+	private Label musicLabel;
+	//submit is an ImageTextButton composed of an image alongside a Label specifying what is the purpose of the button
 	private ImageTextButton submit;
+	//info is an ImageTextButton composed of an image alongside a Label specifying what is the purpose of the button
 	private ImageTextButton info;
+	//level is the level that the user has selected they would like to play in
 	private int level=-1;
+	//isSoundOn boolean indicating whether the player choose for the sound effects to be on or off.
 	private boolean isSoundOn=true;
+	//isMusicOn boolean indicating whether the player choose for the music to be on or off.
 	private boolean isMusicOn=true;
+	//allFieldsCompleted boolean indicating whether all fields have been completed
 	private boolean allFieldsCompleted=false;
+	//infoClicked boolean indicating whether the user has requested to read the information of the game.
 	private boolean infoClicked=false;
-	
-	Texture level1BG,level2BG,level3BG,level4BG,level5BG,level6BG;
-	boolean level1Checked, level2Checked, level3Checked, level4Checked, level5Checked, level6Checked;
+	//the following are a series of images representing the sample preview of a level of the game.
+	private Texture level1BG,level2BG,level3BG,level4BG,level5BG,level6BG;
+	//the following boolean variable represent whether a particular level has been clicked or not.
+	private boolean level1Checked, level2Checked, level3Checked, level4Checked, level5Checked, level6Checked;
 	
 	public HomeScreen(Launcher game) {
 		this.game=game;
@@ -74,12 +82,7 @@ public class HomeScreen implements Screen{
 		stage = new Stage(view,game.batch);
 		Gdx.input.setInputProcessor(stage);
 		Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(),Color.GOLD);
-		//Skin skin = new Skin(Gdx.files.internal("uiskin.json")); 
 		
-		gameIntro= new Label("Welcome magician, make your choices and let's enter into the magic world ! ! !",font);
-		gameIntro.setFontScale(2);
-		gameIntro.setWrap(true);
-		gameIntro.setWidth(500);
 		
 		levelsLabel= new Label("Choose level:",font);
 		soundLabel= new Label("Sound",font);
@@ -92,18 +95,20 @@ public class HomeScreen implements Screen{
 		style.fontColor=Color.ORANGE;
 		style.overFontColor=Color.WHITE;
 		
+		//Creates the submit ImageTextButton by giving it a label and attaching an image next to it.
 		Drawable magicIcon = new TextureRegionDrawable(new TextureRegion(new Texture("magic.png")));
 		ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButtonStyle(magicIcon,null,null,new BitmapFont());
 		submit = new ImageTextButton("                  Start",buttonStyle);
 		submit.setWidth(60);
 		submit.setHeight(60);
-		//submit= new TextButton("Lets goo",style);
+		
+		//Creates the info ImageTextButton by giving it a label and attaching an image next to it.
 		Drawable infoIcon = new TextureRegionDrawable(new TextureRegion(new Texture("infoIcon.png")));
 		ImageTextButton.ImageTextButtonStyle buttonStyle2 = new ImageTextButtonStyle(infoIcon,null,null,new BitmapFont());
 		info = new ImageTextButton("                                How to play",buttonStyle2);
-		submit.setWidth(40);
-		submit.setHeight(40); 
-		//info = new TextButton("How to Play", style);
+		info.setWidth(40);
+		info.setHeight(40); 
+		
 		level1.setChecked(true);
 		soundOnBox.setChecked(true);
 		musicOnBox.setChecked(true);
@@ -116,7 +121,7 @@ public class HomeScreen implements Screen{
 		
 		
 		
-		//initalize stage and all your buttons
+		
 		
 		
 		
@@ -127,12 +132,13 @@ public class HomeScreen implements Screen{
 		
 	}
 	
-	
+	/**
+	 * Defines the structure of the screen through a table layout where each element is in particular row of the table.
+	 */
 	public void layoutOfElements() {
 		Table table = new Table();
 		table.setFillParent(true);
 		
-		//table.add(gameIntro).center().width(500);
 		table.row().padTop(50);
 		table.add(levelsLabel).padRight(120);
 		table.row();
@@ -164,6 +170,12 @@ public class HomeScreen implements Screen{
 		stage.addActor(table);
 	}
 	
+	/**
+	 * makeButtonsMutuallyExclusive uses combines a series of CheckBox variables into particular groups based on their purpose
+	 * ending with a level ButtonGroup, music choice ButtonGroup and sound effects choice ButtonGroup.
+	 * the elements in a particular group are mutually exclusive where only one choice is allowed.
+	 */
+	
 	public void makeButtonsMutuallyExclusive() {
 		ButtonGroup buttonGroup = new ButtonGroup(level1,level2,level3, level4, level5, level6);
 		//next set the max and min amount to be checked
@@ -181,11 +193,13 @@ public class HomeScreen implements Screen{
 		music.setMinCheckCount(1);
 	}
 	
+	/**
+	 * handleListiners is a method that based on the action performed on a particular button it would change its state
+	 */
 	public void handleListiners() {
 		level1.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				if (level1.isChecked()) {
 					level=1;
 					resetChecked();
@@ -198,7 +212,6 @@ public class HomeScreen implements Screen{
 		level2.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(level2.isChecked());
 				if (level2.isChecked()) {
 					level=2;
@@ -211,7 +224,6 @@ public class HomeScreen implements Screen{
 		level3.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(level3.isChecked());
 				if (level3.isChecked()) {
 					level=3;
@@ -224,7 +236,6 @@ public class HomeScreen implements Screen{
 		level4.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(level4.isChecked());
 				if (level4.isChecked()) {
 					level=4;
@@ -237,7 +248,6 @@ public class HomeScreen implements Screen{
 		level5.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(level5.isChecked());
 				if (level5.isChecked()) {
 					level=5;
@@ -250,7 +260,6 @@ public class HomeScreen implements Screen{
 		level6.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(level6.isChecked());
 				if (level6.isChecked()) {
 					level=6;
@@ -263,7 +272,6 @@ public class HomeScreen implements Screen{
 		soundOnBox.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(soundOnBox.isChecked());
 				if (soundOnBox.isChecked()) {
 					isSoundOn=true;
@@ -274,7 +282,6 @@ public class HomeScreen implements Screen{
 		soundOffBox.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(soundOffBox.isChecked());
 				if (soundOffBox.isChecked()) {
 					isSoundOn=false;
@@ -285,7 +292,6 @@ public class HomeScreen implements Screen{
 		musicOffBox.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(musicOffBox.isChecked());
 				if (musicOffBox.isChecked()) {
 					isMusicOn=false;
@@ -296,7 +302,6 @@ public class HomeScreen implements Screen{
 		musicOnBox.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.graphics.setContinuousRendering(musicOnBox.isChecked());
 				if (musicOnBox.isChecked()) {
 					isMusicOn=true;
@@ -341,6 +346,7 @@ public class HomeScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
+		
 		if (this.allFieldsCompleted) {
 			game.findLobby(level-1, isSoundOn, isMusicOn);
 			dispose();
@@ -356,6 +362,7 @@ public class HomeScreen implements Screen{
 		
 		
 		game.batch.begin();
+		//based on the level that has been selected an appropriate background image would be drawn.
 		if(level1Checked) {
 			game.batch.draw(level1BG,0,0);
 		} 

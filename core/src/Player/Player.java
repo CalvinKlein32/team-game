@@ -23,9 +23,10 @@ public class Player extends Sprite {
 	public World world;
 	//b2body is the Body representing the player.
 	public Body b2body;
-	//fdef variable to define the fixtures used.  
+	//fdef variable to define the fixtures.  
 	private FixtureDef fdef;
-	private Fixture f;
+	//currentFixture to be used.
+	private Fixture currentFixture;
 	//isDead is the boolean to check whether player is dead or still alive
 	private boolean isDead;
 	//canOpenDoor is the boolean to check if player has permission to open the door.
@@ -34,11 +35,11 @@ public class Player extends Sprite {
 	private float respawnTimer;
 	//playerStand is the texture that represent when a player is standing firm.
 	private TextureRegion playerStand;
-	//State represent the state in which the player could be iun during the run time of the game.
+	//State represent the state in which the player could be in during the run time of the game.
 	private enum State{JUMPING,STANDING,RUNNING};
 	//currentState is the player's current State.
 	private State currentState;
-	//currentState is the player's previous State.
+	//previousState is the player's previous State.
 	private State previousState;
 	//playerRuns is as an Animation made of a series  textures correlated to when the player is running.
 	private Animation<TextureRegion> playerRuns;
@@ -50,7 +51,7 @@ public class Player extends Sprite {
 	private float stateTimer;
 	//hasFinishedLevel boolean to check whether player has finished the level at which they are playing.
 	private boolean hasFinishedLevel=false;
-	
+	//hasPowerUp boolean to determine whethe rplayer has activated a power up.
 	private boolean hasPowerUp=false;
 	
 	
@@ -101,7 +102,7 @@ public class Player extends Sprite {
 		}else {
 			region=playerStand;
 		}
-		//based on the direction the player is running at it flips the region accordingly.
+		//based on the direction the player is running at, it flips the region accordingly.
 		if ((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
 			region.flip(true, false);
 			runningRight=false;
@@ -123,7 +124,7 @@ public class Player extends Sprite {
 	
 	/**
 	 * 
-	 * @return State of the player based on information about the player body current  speed.
+	 * @return State of the player based on information about the player body current speed in the x and y.
 	 */
 	public State getState() {
 		if (b2body.getLinearVelocity().y>0) {
@@ -145,7 +146,7 @@ public class Player extends Sprite {
 		character.type=BodyDef.BodyType.DynamicBody;
 		b2body = world.createBody(character);		
 		
-		//Defines the fixture of the body by representing it as a cirlce shape.
+		//Defines the fixture of the body by representing it as a circle shape.
 		fdef = new FixtureDef();
 		CircleShape shape = new CircleShape();
 		shape.setRadius(10/Launcher.PPM);
@@ -154,7 +155,7 @@ public class Player extends Sprite {
 		fdef.filter.categoryBits = Launcher.playerBit;
 		//Defines the other fixtures that the player fixture  can collide against the world.
 		fdef.filter.maskBits = Launcher.DefaultBit| Launcher.spikeBit| Launcher.seaBit| Launcher.enemyBit| Launcher.doorBit| Launcher.powerUpBit;
-		f=b2body.createFixture(fdef);
+		currentFixture=b2body.createFixture(fdef);
 	
 		
 		//Create a fixture that represents the bottom side of the player, as a segment below the body of the player.
@@ -218,7 +219,7 @@ public class Player extends Sprite {
 	
 	/**
 	 * Allows a player to not collide with anything, Useful when creating the 2nd player but not making it collide and interact with 
-	 * objects in the world.
+	 * objects in the world acting like a ghost player in the run time of the game.
 	 */
 	public void makeGhost() {
 		Filter filter= new Filter();

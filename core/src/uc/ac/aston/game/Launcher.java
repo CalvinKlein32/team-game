@@ -1,8 +1,9 @@
 package uc.ac.aston.game;
 
 /**
- * Launcher class of the game, which manages the screens to be displayed in the run time of the game.
- * The Launcher class also manages communication to the server acting as a socket.io client.
+ * Launcher class of the game, which run the game by managing the different screens to be displayed in the run time of the game.
+ * The Launcher class also manages communication to the server acting as a socket.io client connecting to a node.js server that is found
+ * at the following URL https://arcane-taiga-94757.herokuapp.com/
  */
 
 import java.net.URISyntaxException;
@@ -34,10 +35,10 @@ public class Launcher extends Game {
 	//dimensions of the window
 	public static final int width =600;
 	public static final int height =600;
-	//A SpriteBatch is an environment that allows sprites and textures to be drawn.
+	//A SpriteBatch is an environment that allows sprites and 2D textures to be drawn.
 	public SpriteBatch batch;
 	public static final float PPM=100;
-	//series of constant, where each is used in identifying an object in the game world.
+	//series of constant, where each is used in identifying an object in the game world essential when managing collisions.
 	public static final short DefaultBit=1;
 	public static final short playerBit=2;
 	public static final short spikeBit=4;
@@ -49,11 +50,11 @@ public class Launcher extends Game {
 	public static final short powerUpBit=256;
 	//socket class that would be used as a client to connect to a node.js server
 	private Socket socket;
-	//current game screen that the Launcher is using to run the game. For each level there is a Screen.
+	//current game screen that the Launcher is using to run the game. For each level there is a Screen, this variable is used to switch between the appropriate screens.
 	private PlayScreen screen;
-	//time frame in which updates are handled.
+	//time frame by which updates are handled.
 	private final float UPDATE_TIME = 1/60f;
-	//current timer related to the update_TIME
+	//current timer related to the update_TIME.
 	private float timer;
 	//Integer indicating the Lobby in which player is in.
 	private int lobbyNum=-1;
@@ -67,28 +68,29 @@ public class Launcher extends Game {
 	private int finalPoints=0;
 	//The points which the opponent player possesses, (incremented after completing each level)
 	private int opponentFinalPoints=0;
-	
+	//AssetManager that contains some of the assets that would be used during run time of the game contains mainly sound effects and music data.
 	public static AssetManager manager;
-	
+	//numPlayer is an integer that indicates teh number the player has been assigned in the lobby if first player to join lobby it would be 1 if 2nd 2. if it hasn't joined a lobby yet -1
 	private int numPlayer=-1;
-	
+	//boolean to indicate whether sound effects is turned on.
 	public static boolean isSoundOn=true;
-	
+	//boolean to indicate whether music is turned on.
 	public static boolean isMusicOn=true;
-	
+	//boolean to indicate whether player has decided to leave their current level to return to home page.
 	public static boolean returnToHome=false;
 	
-	//private HomeScreen homePage;
 	
 	
 	/**
-	 * Displays the first screen of the game, which consist of the first level of the game. Initiates command to connect the socket to the server
+	 * Displays the first screen of the game, which consist of the HomePage screen. Initiates command to connect the socket to the server
 	 * configures events.
 	 */
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		manager=new AssetManager();
+		
+		//loads music file from the asset folder inside the core directory ready to be used through the manager variable 
 		manager.load("music/Background.wav", Music.class);
 		manager.load("music/CorrectAnswer.wav", Music.class);
 		manager.load("music/Dead.mp3", Music.class);
@@ -114,6 +116,15 @@ public class Launcher extends Game {
 	}
 	
 	
+	/**
+	 * Searches for a lobby based on the preferences of the user by moving to the appropriate screen associated with that level
+	 * and notifying the server through a findLobbyByLevel event specifying the chosen level so that server can 
+	 * find an appropriate lobby.
+	 * 
+	 * @param levelChoosed integer indicating the chosen level the user wants to play in.
+	 * @param isSoundOn boolean indicates whether uses prefers the sound effects to be on.
+	 * @param isMusicOn boolean indicates whether uses prefers the music to be on. 
+	 */
 	public void findLobby(int levelChoosed, boolean isSoundOn, boolean isMusicOn) {
 		this.currentLevel=levelChoosed;
 		this.isSoundOn=isSoundOn;
@@ -135,7 +146,9 @@ public class Launcher extends Game {
 		
 		
 	}
-	
+	/**
+	 * disconnecting informs the server that the player wants to disconnect from a particular level through the leaveLevel event
+	 */
 	public void disconnecting() {
 		socket.emit("leaveLevel");
 		this.returnToHome=false;
@@ -183,6 +196,7 @@ public class Launcher extends Game {
 			}catch(JSONException e) {
 				Gdx.app.log("SocketIO", "Error in sending has player finished ");
 			}
+			screen.setHasGameEnded();
 			System.out.println("Congratulations you finished the Game");
 		}
 		hasPlyerFiniehed=false;
@@ -191,7 +205,7 @@ public class Launcher extends Game {
 	}
 	
 	/**
-	 * Updates server with the current player current position.
+	 * Updates server with the player current position through the playerMoved event.
 	 * @param dt delta time to check whether is within the time frame of the game .
 	 */
 	public void updateServer(float dt) {
@@ -216,11 +230,8 @@ public class Launcher extends Game {
 	public void updateHasPlayerFinished() {
 		hasPlyerFiniehed=true;
 		if (hasTheOtrerPlyerFiniehed) {
-			//currentLevel++;
 			screen.setEndingresult(2);
-			//screen.changeToAdvancing();
 			screen.setSignalToMoveLevelReceived(true);
-			//nextLevel(2);
 		}else {
 			currentLevel++;
 		}
@@ -252,25 +263,11 @@ public class Launcher extends Game {
 	}
 	
 	
-/*	public void newGame() {
-		currentLevel=0;
-		screen = new PlayScreen(this,currentLevel,0);
-		setScreen(screen);
-		JSONObject data = new JSONObject();
-		if (numPlayer==2){
-			try {
-				data.put("lobbyNum", lobbyNum);
-				socket.emit("readyTostart", data);
-				screen.createPlayer2();
-				screen.allowMovement();
-			}catch(Exception e) {
-				System.out.println(e);
-			}
-			
-		}
-	}
-	*/
 	
+	/**
+	 * newGame return to the HomePage allowing users to chose their preferences and start a new game after they have disconnected or their 
+	 * opponent has disconnected.
+	 */
 	public void newGame() {
 		setScreen(new HomeScreen(this));
 	}
@@ -281,9 +278,9 @@ public class Launcher extends Game {
 	 * Handles the various events it receives from the server with adequate action.
 	 * the events it responds to are the following:
 	 * socketID: when each ID is send to the appropriate client.
-	 * newPlayer: when a new player connects to the server and other player must be aware of it.
+	 * newPlayer: event received when a user has notified the server about their preferences and the server has assigned a lobby to that user.
 	 * playerDisconeccted: when a player disconnect to the server.
-	 * getPlayers: when a new player connects to the server and the player must be aware of the players that were already there.
+	 * readyTostart: event received when the 2nd player in the same lobby joins so that the player that was waiting can start the level.
 	 * playerMoved: when opposing player has moved.
 	 * playerCompletedLevel: when opposing player has completed their level.
 	 * gameEnded: When opposing player has finished the game.
@@ -313,7 +310,11 @@ public class Launcher extends Game {
 			}
 		}).on("newPlayer", new Emitter.Listener() {
 			
-			//When the client receives a newPlayer event it creates the instance for the opposing player in their current screen.
+			//When the client receives a newPlayer event it store the lobbyNum assigned by the server 
+			//if the lobby says there are two player in the lobby it emits a readyTostart event to the server 
+			//and creates the instance for the opposing player in their current screen 
+			//allowing the game to start. 
+			
 			@Override
 			public void call(Object... args) {
 				JSONObject data = (JSONObject) args[0];
@@ -334,7 +335,8 @@ public class Launcher extends Game {
 			}
 		}).on("readyTostart", new Emitter.Listener() {
 			
-			//When the client receives a newPlayer event it creates the instance for the opposing player in their current screen.
+			//When the client receives a readyTostart event it checks whether they are on the same lobby and if they are .
+			// it creates the instance for the opposing player in their current screen and allows the game to start.
 			@Override
 			public void call(Object... args) {
 				JSONObject data = (JSONObject) args[0];
@@ -352,28 +354,18 @@ public class Launcher extends Game {
 			}
 		}).on("playerDisconeccted", new Emitter.Listener() {
 			
-			//When the client receives a playerDisconeccted event it prints in the console that a player has disconnected with their ID.
+			//When the client receives a playerDisconeccted event it sets lobbyNum and numPlayer to null values which are -1 and notifies 
+			// the playScreen instance of the level they are playing to start disconnecting
 			@Override
 			public void call(Object... args) {
 				JSONObject data = (JSONObject) args[0];
 				try{
 					int lobbyTocheck= data.getInt("oldLobby");
 					if (lobbyTocheck==lobbyNum) {
-						//newGame();
 						lobbyNum = -1;
 						numPlayer= -1;
-						//System.out.print("coming from "+lobbyTocheck+" Player going to "+lobbyNum+" to become player number "+numPlayer);
 						screen.changeToDisconnecting();
-/*						if (count==2){
-							data.put("lobbyNum", lobbyNum);
-							socket.emit("readyTostart", data);
-							screen.createPlayer2();
-							screen.allowMovement();
-						}
-						*/
 					}
-					//Gdx.app.log("SocketIO", "You have been moved up to lobby: "+lobbyNum);
-					//lobbyFull=true;
 				}catch(JSONException e) {
 					Gdx.app.log("SocketIO", "Error in fetching disconneccted player");
 				}
@@ -422,7 +414,6 @@ public class Launcher extends Game {
 						}else {
 							currentLevel++;
 							screen.changeToConcluidng();
-							//screen.setEndingresult(2);
 						}	
 						
 					}		

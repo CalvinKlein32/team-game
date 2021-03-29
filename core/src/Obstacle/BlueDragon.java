@@ -54,7 +54,9 @@ public class BlueDragon extends Enemy{
 		FixtureDef fdef = new FixtureDef();
 		CircleShape shape = new CircleShape();
 		shape.setRadius(10/Launcher.PPM);
+		//Defines how the fixture would be identified in the world.
 		fdef.filter.categoryBits = Launcher.enemyBit;
+		//Defines the other fixtures that the player fixture  can collide against the world.
 		fdef.filter.maskBits = Launcher.DefaultBit|Launcher.playerBit|Launcher.objectBit;
 		
 		fdef.shape=shape;
