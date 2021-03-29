@@ -1,15 +1,22 @@
 {
-  "name": "gamedemo",
+  "name": "thegame",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "engines": {
+    "node": "14.15.4"
   },
+  "scripts": {
+    "web": "node index.js"
+  },
+  "keywords": [
+    "Calvin",
+    "Sarpong"
+  ],
   "author": "Calvin Sarpong",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
-    "socket.io": "^3.0.3"
+    "socket.io": "^1.7.3"
   }
 }
